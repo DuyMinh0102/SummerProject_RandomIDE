@@ -210,8 +210,7 @@ int main() {
 
         // Sidebar Explorer
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        
-        // Set up sidebar window
+
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(ImVec2(separator_pos, viewport->WorkSize.y));
         ImGuiWindowFlags sidebar_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
@@ -235,7 +234,6 @@ int main() {
         
         // List directories and files
         try {
-            // Show inline new file input if creating new file
             if (is_creating_new_file) {
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
                 ImGui::Text("[FILE] ");
@@ -305,7 +303,7 @@ int main() {
             if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
                 is_dragging_separator = true;
                 separator_pos = io.MousePos.x - viewport->WorkPos.x;
-                // Clamp separator position
+
                 if (separator_pos < 100.0f) separator_pos = 100.0f;
                 if (separator_pos > viewport->WorkSize.x - 100.0f) separator_pos = viewport->WorkSize.x - 100.0f;
             }
@@ -323,10 +321,10 @@ int main() {
 
         ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, terminalHeight));
 
-               // --- C. Set strict flags to lock the window ---
+        // --- C. Set strict flags to lock the window ---
         ImGuiWindowFlags window_flags = 0;
-        window_flags |= ImGuiWindowFlags_NoTitleBar;      // Hide the ImGui title
-        window_flags |= ImGuiWindowFlags_NoCollapse;      // Prevent minimizing
+        window_flags |= ImGuiWindowFlags_NoTitleBar;
+        window_flags |= ImGuiWindowFlags_NoCollapse;
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus; 
         window_flags |= ImGuiWindowFlags_NoNavFocus;     
 
@@ -411,7 +409,6 @@ int main() {
         // --- D. Draw the locked Code Editor window ---
         ImGui::Begin("Code Editor Background", nullptr, window_flags);
         
-        // Render the actual text editing widget inside this locked space
         editor.Render("TextEditor"); 
         
         ImGui::End();
