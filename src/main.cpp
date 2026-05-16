@@ -4,6 +4,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "TextEditor.h"
+#include "portable-file-dialogs.h"
 #include <filesystem>
 #include <vector>
 #include <string>
@@ -75,27 +76,43 @@ int main() {
         ImGui::NewFrame();
         ImGuiIO& io = ImGui::GetIO();
 
-        // Ctrl
-        if (io.KeyCtrl) {
-            if (ImGui::IsKeyPressed(ImGuiKey_Equal)) { 
-                if (io.FontGlobalScale < 10.0f) io.FontGlobalScale += 0.1f;
-            }
-            if (ImGui::IsKeyPressed(ImGuiKey_Minus)) {
-                if (io.FontGlobalScale > 0.5f) io.FontGlobalScale -= 0.1f;
-            }
-        }
-
         // 5. Build the UI
 
         // Main Menu Bar
         if (ImGui::BeginMainMenuBar()){
+            // Open/Save file
             if (ImGui::BeginMenu("File")){
-                if (ImGui::MenuItem("Open", "Ctrl + O")) {}
-                if (ImGui::MenuItem("Save", "Ctrl + S")) {}
+                if (ImGui::MenuItem("Open", "Ctrl + O")) {
+                    auto selection = pfd::open_file("Open File", ".", {"C++ Files", "*.cpp *.h *.hpp", "All Files", "*"}).result();
+
+                    if (!selection.empty()){
+                        std::string filepath = selection[0];
+                        std::string content = ReadFileContent(filepath);
+                        editor.SetText(content);
+
+                        std::filesystem::path path_obj(filepath);
+                        editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                    }
+                }
+                if (ImGui::MenuItem("Save", "Ctrl + S")) {
+                    auto destination = pfd::save_file("Save File As", ".", { "C++ Files", "*.cpp *.h", "All Files", "*" }).result();
+                        
+                    if (!destination.empty()) {
+                        std::string current_text = editor.GetText();
+                        
+                        std::ofstream out_file(destination);
+                        if (out_file.is_open()) {
+                            out_file << current_text;
+                            out_file.close();
+                        }
+                    }
+                }
                 ImGui::Separator();
                 if(ImGui::MenuItem("Exit", "Alt+F4")) {glfwSetWindowShouldClose(window, true); }
                 ImGui::EndMenu();
             }
+
+            // Zoom In/Out
             if (ImGui::BeginMenu("View")){
                 if (ImGui::MenuItem("Zoom In", "Ctrl + =")) { 
                     if (io.FontGlobalScale <= 10.0f) io.FontGlobalScale += 0.1f; 
@@ -105,6 +122,45 @@ int main() {
                 }
                 ImGui::EndMenu();
             }
+
+            if (io.KeyCtrl) {
+                if (ImGui::IsKeyPressed(ImGuiKey_Equal)) { 
+                    if (io.FontGlobalScale < 10.0f) io.FontGlobalScale += 0.1f;
+                }
+                if (ImGui::IsKeyPressed(ImGuiKey_Minus)) {
+                    if (io.FontGlobalScale > 0.5f) io.FontGlobalScale -= 0.1f;
+                }
+                if(ImGui::IsKeyPressed(ImGuiKey_0)) io.FontGlobalScale = 1.0f;
+                if(ImGui::IsKeyPressed(ImGuiKey_O)){
+                    auto selection = pfd::open_file("Open File", ".", {"C++ Files", "*.cpp *.h *.hpp", "All Files", "*"}).result();
+
+                    if (!selection.empty()){
+                        std::string filepath = selection[0];
+                        std::string content = ReadFileContent(filepath);
+                        editor.SetText(content);
+
+                        std::filesystem::path path_obj(filepath);
+                        editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                    }
+                }
+                if(ImGui::IsKeyPressed(ImGuiKey_S)){
+                    auto destination = pfd::save_file("Save File As", ".", { "C++ Files", "*.cpp *.h", "All Files", "*" }).result();
+                        
+                    if (!destination.empty()) {
+                        std::string current_text = editor.GetText();
+                        
+                        std::ofstream out_file(destination);
+                        if (out_file.is_open()) {
+                            out_file << current_text;
+                            out_file.close();
+                        }
+                    }
+                }
+            }
+            if (io.KeyAlt){
+                if (ImGui::IsKeyPressed(ImGuiKey_F4)) glfwSetWindowShouldClose(window, true);
+            }
+
             ImGui::EndMainMenuBar();
         }
 
