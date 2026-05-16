@@ -107,7 +107,7 @@ int main() {
     editor.SetText("// Write your C++ code here!\n\nint main() {\n    return 0;\n}");
 
     // Tab management
-    std::vector<std::unique_ptr<Tab>> open_tabs;
+    std::vector<std::unique_ptr<Tab>> openTabs;
     int active_tab_index = -1;
 
     // File explorer state
@@ -115,30 +115,30 @@ int main() {
     std::vector<std::filesystem::path> selected_files;
 
     // Separator state (initial sidebar width)
-    float separator_pos = 250.0f;
+    float separatorPos = 250.0f;
     bool is_dragging_separator = false;
 
     // Terminal state
-    std::vector<std::string> terminal_log;
-    char terminal_input[256] = "";
-    terminal_log.push_back("IDE Terminal initialized...");
-    terminal_log.push_back("Type 'help' for a list of commands.");
+    std::vector<std::string> terminalLog;
+    char terminalInput[256] = "";
+    terminalLog.push_back("IDE Terminal initialized...");
+    terminalLog.push_back("Type 'help' for a list of commands.");
     // New file inline creation state
-    bool is_creating_new_file = false;
-    char new_file_name_buffer[256] = "";
+    bool isCreatingNewFile = false;
+    char newFileNameBuffer[256] = "";
 
     // New folder inline creation state
-    bool is_creating_new_folder = false;
-    char new_folder_name_buffer[256] = "";
+    bool isCreatingNewFolder = false;
+    char newFolderNameBuffer[256] = "";
 
     // Context menu state
-    bool show_empty_space_context_menu = false;
-    bool show_item_context_menu = false;
-    std::filesystem::path selected_item_path;
-    bool selected_item_is_directory = false;
+    bool showEmptySpaceContextMenu = false;
+    bool showItemContextMenu = false;
+    std::filesystem::path selectedItemPath;
+    bool selectedItemIsDir = false;
 
     // Welcome screen state
-    bool show_welcome_screen = true;
+    bool showWelcomeScreen = true;
 
     // 4. The Application / Render Loop
     while (!glfwWindowShouldClose(window)) {
@@ -161,41 +161,41 @@ int main() {
 
                     if (!selection.empty()){
                         std::string filepath = selection[0];
-                        std::filesystem::path path_obj(filepath);
+                        std::filesystem::path objPath(filepath);
                         
                         // Check if file is already open in tabs
-                        bool already_open = false;
-                        int existing_tab_index = -1;
+                        bool alreadyOpen = false;
+                        int existingTabIndex = -1;
                         
-                        for (size_t i = 0; i < open_tabs.size(); i++) {
-                            if (open_tabs[i]->filepath == path_obj) {
-                                already_open = true;
-                                existing_tab_index = i;
+                        for (size_t i = 0; i < openTabs.size(); i++) {
+                            if (openTabs[i]->filepath == objPath) {
+                                alreadyOpen = true;
+                                existingTabIndex = i;
                                 break;
                             }
                         }
                         
-                        if (already_open) {
+                        if (alreadyOpen) {
                             // Switch to existing tab
-                            active_tab_index = existing_tab_index;
+                            active_tab_index = existingTabIndex;
                         } else {
                             // Create new tab
-                            open_tabs.push_back(std::make_unique<Tab>(path_obj));
-                            active_tab_index = open_tabs.size() - 1;
+                            openTabs.push_back(std::make_unique<Tab>(objPath));
+                            active_tab_index = openTabs.size() - 1;
                         }
                         
-                        current_path = path_obj.parent_path();
-                        show_welcome_screen = false;
+                        current_path = objPath.parent_path();
+                        showWelcomeScreen = false;
                     }
                 }
                 if (ImGui::MenuItem("Save", "Ctrl + S")) {
-                    if (active_tab_index >= 0 && active_tab_index < (int)open_tabs.size()) {
-                        std::string current_text = open_tabs[active_tab_index]->editor.GetText();
-                        std::ofstream out_file(open_tabs[active_tab_index]->filepath);
-                        if (out_file.is_open()) {
-                            out_file << current_text;
-                            out_file.close();
-                            open_tabs[active_tab_index]->is_modified = false;
+                    if (active_tab_index >= 0 && active_tab_index < (int)openTabs.size()) {
+                        std::string currentText = openTabs[active_tab_index]->editor.GetText();
+                        std::ofstream outFile(openTabs[active_tab_index]->filepath);
+                        if (outFile.is_open()) {
+                            outFile << currentText;
+                            outFile.close();
+                            openTabs[active_tab_index]->is_modified = false;
                         }
                     }
                 }
@@ -228,41 +228,41 @@ int main() {
 
                     if (!selection.empty()){
                         std::string filepath = selection[0];
-                        std::filesystem::path path_obj(filepath);
+                        std::filesystem::path objPath(filepath);
                         
                         // Check if file is already open in tabs
-                        bool already_open = false;
-                        int existing_tab_index = -1;
+                        bool alreadyOpen = false;
+                        int existingTabIndex = -1;
                         
-                        for (size_t i = 0; i < open_tabs.size(); i++) {
-                            if (open_tabs[i]->filepath == path_obj) {
-                                already_open = true;
-                                existing_tab_index = i;
+                        for (size_t i = 0; i < openTabs.size(); i++) {
+                            if (openTabs[i]->filepath == objPath) {
+                                alreadyOpen = true;
+                                existingTabIndex = i;
                                 break;
                             }
                         }
                         
-                        if (already_open) {
+                        if (alreadyOpen) {
                             // Switch to existing tab
-                            active_tab_index = existing_tab_index;
+                            active_tab_index = existingTabIndex;
                         } else {
                             // Create new tab
-                            open_tabs.push_back(std::make_unique<Tab>(path_obj));
-                            active_tab_index = open_tabs.size() - 1;
+                            openTabs.push_back(std::make_unique<Tab>(objPath));
+                            active_tab_index = openTabs.size() - 1;
                         }
                         
-                        current_path = path_obj.parent_path();
-                        show_welcome_screen = false;
+                        current_path = objPath.parent_path();
+                        showWelcomeScreen = false;
                     }
                 }
                 if(ImGui::IsKeyPressed(ImGuiKey_S)){
-                    if (active_tab_index >= 0 && active_tab_index < (int)open_tabs.size()) {
-                        std::string current_text = open_tabs[active_tab_index]->editor.GetText();
-                        std::ofstream out_file(open_tabs[active_tab_index]->filepath);
-                        if (out_file.is_open()) {
-                            out_file << current_text;
-                            out_file.close();
-                            open_tabs[active_tab_index]->is_modified = false;
+                    if (active_tab_index >= 0 && active_tab_index < (int)openTabs.size()) {
+                        std::string currentText = openTabs[active_tab_index]->editor.GetText();
+                        std::ofstream outFile(openTabs[active_tab_index]->filepath);
+                        if (outFile.is_open()) {
+                            outFile << currentText;
+                            outFile.close();
+                            openTabs[active_tab_index]->is_modified = false;
                         }
                     }
                 }
@@ -275,10 +275,10 @@ int main() {
         }
 
         // Welcome Screen (VSCode-like)
-        if (show_welcome_screen) {
+        if (showWelcomeScreen) {
             const ImGuiViewport* viewport = ImGui::GetMainViewport();
-            ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
-            ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y - 200.0f));
+            ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separatorPos, viewport->WorkPos.y));
+            ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos, viewport->WorkSize.y - 200.0f));
             ImGuiWindowFlags welcome_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | 
                                            ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
             
@@ -314,9 +314,9 @@ int main() {
             ImGui::SetCursorPosX(center_pos.x - button_width * 0.5f);
             ImGui::SetCursorPosY(center_pos.y - 50);
             if (ImGui::Button("New File", ImVec2(button_width, 40))) {
-                is_creating_new_file = true;
-                new_file_name_buffer[0] = '\0';
-                show_welcome_screen = false;
+                isCreatingNewFile = true;
+                newFileNameBuffer[0] = '\0';
+                showWelcomeScreen = false;
             }
             
             // Open File Button
@@ -326,32 +326,32 @@ int main() {
                 auto selection = pfd::open_file("Open File", ".", {"C++ Files", "*.cpp *.h *.hpp", "All Files", "*"}).result();
                 if (!selection.empty()) {
                     std::string filepath = selection[0];
-                    std::filesystem::path path_obj(filepath);
+                    std::filesystem::path objPath(filepath);
                     
                     // Check if file is already open in tabs
-                    bool already_open = false;
-                    int existing_tab_index = -1;
+                    bool alreadyOpen = false;
+                    int existingTabIndex = -1;
                     
-                    for (size_t i = 0; i < open_tabs.size(); i++) {
-                        if (open_tabs[i]->filepath == path_obj) {
-                            already_open = true;
-                            existing_tab_index = i;
+                    for (size_t i = 0; i < openTabs.size(); i++) {
+                        if (openTabs[i]->filepath == objPath) {
+                            alreadyOpen = true;
+                            existingTabIndex = i;
                             break;
                         }
                     }
                     
-                    if (already_open) {
+                    if (alreadyOpen) {
                         // Switch to existing tab
-                        active_tab_index = existing_tab_index;
+                        active_tab_index = existingTabIndex;
                     } else {
                         // Create new tab
-                        open_tabs.push_back(std::make_unique<Tab>(path_obj));
-                        active_tab_index = open_tabs.size() - 1;
+                        openTabs.push_back(std::make_unique<Tab>(objPath));
+                        active_tab_index = openTabs.size() - 1;
                     }
                     
-                    current_path = path_obj.parent_path();
+                    current_path = objPath.parent_path();
                 }
-                show_welcome_screen = false;
+                showWelcomeScreen = false;
             }
             
             // Open Folder Button
@@ -362,7 +362,7 @@ int main() {
                 if (!folder.empty()) {
                     current_path = folder;
                 }
-                show_welcome_screen = false;
+                showWelcomeScreen = false;
             }
             
             ImGui::PopStyleColor(3); // Pop button colors
@@ -375,7 +375,7 @@ int main() {
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
 
         ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(ImVec2(separator_pos, viewport->WorkSize.y));
+        ImGui::SetNextWindowSize(ImVec2(separatorPos, viewport->WorkSize.y));
         ImGuiWindowFlags sidebar_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
         
         ImGui::Begin("File Explorer", nullptr, sidebar_flags);
@@ -387,8 +387,8 @@ int main() {
         }
         ImGui::SameLine();
         if (ImGui::Button("New File")) {
-            is_creating_new_file = true;
-            new_file_name_buffer[0] = '\0';
+            isCreatingNewFile = true;
+            newFileNameBuffer[0] = '\0';
         }
         ImGui::SameLine();
         ImGui::Text(current_path.string().c_str());
@@ -398,26 +398,26 @@ int main() {
         // Context menu for empty space
         if (ImGui::BeginPopupContextWindow("##empty_space_context", ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight)) {
             if (ImGui::MenuItem("New File")) {
-                is_creating_new_file = true;
-                new_file_name_buffer[0] = '\0';
+                isCreatingNewFile = true;
+                newFileNameBuffer[0] = '\0';
             }
             if (ImGui::MenuItem("New Folder")) {
-                is_creating_new_folder = true;
-                new_folder_name_buffer[0] = '\0';
+                isCreatingNewFolder = true;
+                newFolderNameBuffer[0] = '\0';
             }
             ImGui::EndPopup();
         }
         
         // List directories and files
         try {
-            if (is_creating_new_file) {
+            if (isCreatingNewFile) {
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
                 ImGui::Text("[FILE] ");
                 ImGui::SameLine();
                 ImGui::SetKeyboardFocusHere();
-                if (ImGui::InputText("##newfilename", new_file_name_buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
-                    if (strlen(new_file_name_buffer) > 0) {
-                        std::filesystem::path new_file_path = current_path / new_file_name_buffer;
+                if (ImGui::InputText("##newfilename", newFileNameBuffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
+                    if (strlen(newFileNameBuffer) > 0) {
+                        std::filesystem::path new_file_path = current_path / newFileNameBuffer;
                         
                         // Create the file
                         std::ofstream new_file(new_file_path);
@@ -425,51 +425,51 @@ int main() {
                             new_file.close();
                             
                             // Open the new file in a tab
-                            open_tabs.push_back(std::make_unique<Tab>(new_file_path));
-                            active_tab_index = open_tabs.size() - 1;
-                            show_welcome_screen = false;
+                            openTabs.push_back(std::make_unique<Tab>(new_file_path));
+                            active_tab_index = openTabs.size() - 1;
+                            showWelcomeScreen = false;
                         }
                     }
-                    is_creating_new_file = false;
+                    isCreatingNewFile = false;
                 }
                 ImGui::PopStyleColor();
                 
                 // Cancel on Escape
                 if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-                    is_creating_new_file = false;
+                    isCreatingNewFile = false;
                 }
                 
                 // Cancel on click outside the input box
                 if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsItemActive()) {
-                    is_creating_new_file = false;
+                    isCreatingNewFile = false;
                 }
             }
 
             // Show inline new folder input if creating new folder
-            if (is_creating_new_folder) {
+            if (isCreatingNewFolder) {
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
                 ImGui::Text("[DIR] ");
                 ImGui::SameLine();
                 ImGui::SetKeyboardFocusHere();
-                if (ImGui::InputText("##newfoldername", new_folder_name_buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
-                    if (strlen(new_folder_name_buffer) > 0) {
-                        std::filesystem::path new_folder_path = current_path / new_folder_name_buffer;
+                if (ImGui::InputText("##newfoldername", newFolderNameBuffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
+                    if (strlen(newFolderNameBuffer) > 0) {
+                        std::filesystem::path new_folder_path = current_path / newFolderNameBuffer;
                         
                         // Create the folder
                         std::filesystem::create_directory(new_folder_path);
                     }
-                    is_creating_new_folder = false;
+                    isCreatingNewFolder = false;
                 }
                 ImGui::PopStyleColor();
                 
                 // Cancel on Escape
                 if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-                    is_creating_new_folder = false;
+                    isCreatingNewFolder = false;
                 }
                 
                 // Cancel on click outside the input box
                 if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsItemActive()) {
-                    is_creating_new_folder = false;
+                    isCreatingNewFolder = false;
                 }
             }
             
@@ -498,28 +498,28 @@ int main() {
                     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
                     if (ImGui::Selectable(("[FILE] " + filename).c_str())) {
                         // Check if file is already open in tabs
-                        bool already_open = false;
-                        int existing_tab_index = -1;
+                        bool alreadyOpen = false;
+                        int existingTabIndex = -1;
                         
-                        for (size_t i = 0; i < open_tabs.size(); i++) {
-                            if (open_tabs[i]->filepath == entry.path()) {
-                                already_open = true;
-                                existing_tab_index = i;
+                        for (size_t i = 0; i < openTabs.size(); i++) {
+                            if (openTabs[i]->filepath == entry.path()) {
+                                alreadyOpen = true;
+                                existingTabIndex = i;
                                 break;
                             }
                         }
                         
-                        if (already_open) {
+                        if (alreadyOpen) {
                             // Switch to existing tab
-                            active_tab_index = existing_tab_index;
+                            active_tab_index = existingTabIndex;
                         } else {
                             // Create new tab
-                            open_tabs.push_back(std::make_unique<Tab>(entry.path()));
-                            active_tab_index = open_tabs.size() - 1;
+                            openTabs.push_back(std::make_unique<Tab>(entry.path()));
+                            active_tab_index = openTabs.size() - 1;
                         }
                         
                         // Hide welcome screen when opening a file
-                        show_welcome_screen = false;
+                        showWelcomeScreen = false;
                     }
                     // Right-click context menu for file
                     if (ImGui::BeginPopupContextItem()) {
@@ -542,17 +542,17 @@ int main() {
         ImGui::End();
 
         // Handle separator dragging (check if mouse is near separator)
-        float separator_x = viewport->WorkPos.x + separator_pos;
+        float separator_x = viewport->WorkPos.x + separatorPos;
         bool is_near_separator = (io.MousePos.x >= separator_x - 4 && io.MousePos.x <= separator_x + 4);
         
         if (is_near_separator || is_dragging_separator) {
             ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
             if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
                 is_dragging_separator = true;
-                separator_pos = io.MousePos.x - viewport->WorkPos.x;
+                separatorPos = io.MousePos.x - viewport->WorkPos.x;
 
-                if (separator_pos < 100.0f) separator_pos = 100.0f;
-                if (separator_pos > viewport->WorkSize.x - 100.0f) separator_pos = viewport->WorkSize.x - 100.0f;
+                if (separatorPos < 100.0f) separatorPos = 100.0f;
+                if (separatorPos > viewport->WorkSize.x - 100.0f) separatorPos = viewport->WorkSize.x - 100.0f;
             }
         }
         if (ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
@@ -564,9 +564,9 @@ int main() {
 
         float terminalYPos = viewport->WorkPos.y + viewport->WorkSize.y - terminalHeight;
 
-        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, terminalYPos));
+        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separatorPos, terminalYPos));
 
-        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, terminalHeight));
+        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos, terminalHeight));
 
         // --- C. Set strict flags to lock the window ---
         ImGuiWindowFlags window_flags = 0;
@@ -581,7 +581,7 @@ int main() {
         const float footerHeightToReserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
 
         if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footerHeightToReserve), false, ImGuiWindowFlags_HorizontalScrollbar)){
-            for (const std::string& line : terminal_log){
+            for (const std::string& line : terminalLog){
                 if (line.rfind("> ", 0) == 0){
                     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 1.0f, 0.4f, 1.0f));
                     ImGui::TextUnformatted(line.c_str());
@@ -604,14 +604,14 @@ int main() {
 
         ImGui::PushItemWidth(-1);
 
-        if(ImGui::InputText("##terminal_input", terminal_input, IM_ARRAYSIZE(terminal_input), inputFlags)){
-            std::string command = terminal_input;
+        if(ImGui::InputText("##terminalInput", terminalInput, IM_ARRAYSIZE(terminalInput), inputFlags)){
+            std::string command = terminalInput;
 
             if (!command.empty()){
-                terminal_log.push_back("> " + command);
+                terminalLog.push_back("> " + command);
 
                 if (command == "clear"){
-                    terminal_log.clear();
+                    terminalLog.clear();
                 }
                 else if(command.rfind("cd ", 0) == 0){
                     std::string newDir = command.substr(3);
@@ -620,10 +620,10 @@ int main() {
                         std::filesystem::current_path(newDir);
 
                         current_path= std::filesystem::current_path();
-                        terminal_log.push_back(current_path.string());  
+                        terminalLog.push_back(current_path.string());  
                     }
                     catch (const std::exception& e){
-                        terminal_log.push_back(std::string("cd error: ") + e.what());
+                        terminalLog.push_back(std::string("cd error: ") + e.what());
                     }
                 }
                 else{
@@ -633,12 +633,12 @@ int main() {
                     std::string line;
                     while(std::getline(stream, line)){
                         if (!line.empty() && line.back() == '\n') line.pop_back();
-                        terminal_log.push_back(line); 
+                        terminalLog.push_back(line); 
                     }
                 }
             }
 
-            strcpy(terminal_input, "");
+            strcpy(terminalInput, "");
             reclaimFocus = true;
         }
         ImGui::PopItemWidth();
@@ -651,21 +651,21 @@ int main() {
 
         // Tab bar and Editor window (takes remaining space)
         float tab_bar_height = 30.0f;
-        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
-        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y - terminalHeight));
+        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separatorPos, viewport->WorkPos.y));
+        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos, viewport->WorkSize.y - terminalHeight));
 
         // --- D. Draw the locked Code Editor window ---
         ImGui::Begin("Code Editor Background", nullptr, window_flags);
         
         // Draw tab bar if there are open tabs
-        if (!open_tabs.empty()) {
+        if (!openTabs.empty()) {
             if (ImGui::BeginTabBar("##TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_AutoSelectNewTabs)) {
-                for (size_t i = 0; i < open_tabs.size(); i++) {
+                for (size_t i = 0; i < openTabs.size(); i++) {
                     bool is_open = true;
-                    std::string tab_label = open_tabs[i]->filename;
+                    std::string tab_label = openTabs[i]->filename;
                     
                     // Add modified indicator
-                    if (open_tabs[i]->is_modified) {
+                    if (openTabs[i]->is_modified) {
                         tab_label += " *";
                     }
                     
@@ -679,13 +679,13 @@ int main() {
                     
                     // Handle tab close
                     if (!is_open) {
-                        open_tabs.erase(open_tabs.begin() + i);
-                        if (active_tab_index >= (int)open_tabs.size()) {
-                            active_tab_index = open_tabs.size() - 1;
+                        openTabs.erase(openTabs.begin() + i);
+                        if (active_tab_index >= (int)openTabs.size()) {
+                            active_tab_index = openTabs.size() - 1;
                         }
-                        if (open_tabs.empty()) {
+                        if (openTabs.empty()) {
                             active_tab_index = -1;
-                            show_welcome_screen = true;
+                            showWelcomeScreen = true;
                         }
                         i--; // Adjust index after erasing
                     }
@@ -696,16 +696,16 @@ int main() {
             ImGui::Separator();
             
             // Render the active tab's editor
-            if (active_tab_index >= 0 && active_tab_index < (int)open_tabs.size()) {
-                open_tabs[active_tab_index]->editor.Render("TextEditor");
+            if (active_tab_index >= 0 && active_tab_index < (int)openTabs.size()) {
+                openTabs[active_tab_index]->editor.Render("TextEditor");
             }
         }
         
         ImGui::End();
-        if (!show_welcome_screen){
+        if (!showWelcomeScreen){
             // Editor window (takes remaining space)
-            ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
-            ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y - terminalHeight));
+            ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separatorPos, viewport->WorkPos.y));
+            ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos, viewport->WorkSize.y - terminalHeight));
 
             // --- D. Draw the locked Code Editor window ---
             ImGui::Begin("Code Editor Background", nullptr, window_flags);
