@@ -111,9 +111,12 @@ int main() {
         // Sidebar Explorer
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
         
+        // Calculate dynamic sidebar width based on font scale
+        float sidebar_width = 250.0f * io.FontGlobalScale;
+        
         // Set up sidebar window
         ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(ImVec2(250, viewport->WorkSize.y));
+        ImGui::SetNextWindowSize(ImVec2(sidebar_width, viewport->WorkSize.y));
         ImGuiWindowFlags sidebar_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | 
                                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
         
@@ -137,13 +140,13 @@ int main() {
                 
                 if (is_directory) {
                     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
-                    if (ImGui::Selectable(("📁 " + filename).c_str())) {
+                    if (ImGui::Selectable(("[DIR] " + filename).c_str())) {
                         current_path = entry.path();
                     }
                     ImGui::PopStyleColor();
                 } else {
                     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
-                    if (ImGui::Selectable(("📄 " + filename).c_str())) {
+                    if (ImGui::Selectable(("[FILE] " + filename).c_str())) {
                         std::string content = ReadFileContent(entry.path());
                         if (!content.empty()) {
                             editor.SetText(content);
@@ -161,8 +164,8 @@ int main() {
         ImGui::End();
 
         // Editor window (takes remaining space)
-        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + 250, viewport->WorkPos.y));
-        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - 250, viewport->WorkSize.y));
+        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + sidebar_width, viewport->WorkPos.y));
+        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - sidebar_width, viewport->WorkSize.y));
 
         // --- C. Set strict flags to lock the window ---
         ImGuiWindowFlags window_flags = 0;
