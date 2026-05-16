@@ -32,16 +32,36 @@ int main() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        ImGuiIO& io = ImGui::GetIO();
+
+        // Ctrl
+        if (io.KeyCtrl) {
+            if (ImGui::IsKeyPressed(ImGuiKey_Equal)) { 
+                if (io.FontGlobalScale < 10.0f) io.FontGlobalScale += 0.1f;
+            }
+            if (ImGui::IsKeyPressed(ImGuiKey_Minus)) {
+                if (io.FontGlobalScale > 0.5f) io.FontGlobalScale -= 0.1f;
+            }
+        }
 
         // 5. Build the UI
 
         // Main Menu Bar
         if (ImGui::BeginMainMenuBar()){
             if (ImGui::BeginMenu("File")){
-                if (ImGui::MenuItem("Open", "Ctrl+O")) {}
-                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+                if (ImGui::MenuItem("Open", "Ctrl + O")) {}
+                if (ImGui::MenuItem("Save", "Ctrl + S")) {}
                 ImGui::Separator();
                 if(ImGui::MenuItem("Exit", "Alt+F4")) {glfwSetWindowShouldClose(window, true); }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("View")){
+                if (ImGui::MenuItem("Zoom In", "Ctrl + =")) { 
+                    if (io.FontGlobalScale <= 10.0f) io.FontGlobalScale += 0.1f; 
+                }
+                if (ImGui::MenuItem("Zoom Out", "Ctrl + -")) { 
+                    if (io.FontGlobalScale >= 0.5f) io.FontGlobalScale -= 0.1f;
+                }
                 ImGui::EndMenu();
             }
             ImGui::EndMainMenuBar();
