@@ -4,6 +4,43 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "TextEditor.h"
+#include <filesystem>
+#include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
+
+// Helper function to read file content
+std::string ReadFileContent(const std::filesystem::path& filepath) {
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        return "";
+    }
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
+}
+
+// Helper function to get language definition based on file extension
+TextEditor::LanguageDefinition GetLanguageFromExtension(const std::string& ext) {
+    if (ext == ".cpp" || ext == ".hpp" || ext == ".h" || ext == ".cxx" || ext == ".cc") {
+        return TextEditor::LanguageDefinition::CPlusPlus();
+    } else if (ext == ".c") {
+        return TextEditor::LanguageDefinition::C();
+    } else if (ext == ".glsl" || ext == ".frag" || ext == ".vert") {
+        return TextEditor::LanguageDefinition::GLSL();
+    } else if (ext == ".hlsl") {
+        return TextEditor::LanguageDefinition::HLSL();
+    } else if (ext == ".sql") {
+        return TextEditor::LanguageDefinition::SQL();
+    } else if (ext == ".lua") {
+        return TextEditor::LanguageDefinition::Lua();
+    } else if (ext == ".as") {
+        return TextEditor::LanguageDefinition::AngelScript();
+    } else {
+        return TextEditor::LanguageDefinition::CPlusPlus(); // Default
+    }
+}
 
 int main() {
 
@@ -23,6 +60,10 @@ int main() {
     TextEditor editor;
     editor.SetLanguageDefinition(TextEditor::LanguageDefinition::CPlusPlus());
     editor.SetText("// Write your C++ code here!\n\nint main() {\n    return 0;\n}");
+
+    // File explorer state
+    std::filesystem::path current_path = std::filesystem::current_path();
+    std::vector<std::filesystem::path> selected_files;
 
     // 4. The Application / Render Loop
     while (!glfwWindowShouldClose(window)) {
@@ -67,9 +108,61 @@ int main() {
             ImGui::EndMainMenuBar();
         }
 
+        // Sidebar Explorer
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        
+        // Set up sidebar window
         ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(viewport->WorkSize);
+        ImGui::SetNextWindowSize(ImVec2(250, viewport->WorkSize.y));
+        ImGuiWindowFlags sidebar_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | 
+                                        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+        
+        ImGui::Begin("File Explorer", nullptr, sidebar_flags);
+        
+        if (ImGui::Button("Up")) {
+            if (current_path.has_parent_path()) {
+                current_path = current_path.parent_path();
+            }
+        }
+        ImGui::SameLine();
+        ImGui::Text(current_path.string().c_str());
+        
+        ImGui::Separator();
+        
+        // List directories and files
+        try {
+            for (const auto& entry : std::filesystem::directory_iterator(current_path)) {
+                std::string filename = entry.path().filename().string();
+                bool is_directory = entry.is_directory();
+                
+                if (is_directory) {
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+                    if (ImGui::Selectable(("📁 " + filename).c_str())) {
+                        current_path = entry.path();
+                    }
+                    ImGui::PopStyleColor();
+                } else {
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
+                    if (ImGui::Selectable(("📄 " + filename).c_str())) {
+                        std::string content = ReadFileContent(entry.path());
+                        if (!content.empty()) {
+                            editor.SetText(content);
+                            std::string ext = entry.path().extension().string();
+                            editor.SetLanguageDefinition(GetLanguageFromExtension(ext));
+                        }
+                    }
+                    ImGui::PopStyleColor();
+                }
+            }
+        } catch (const std::filesystem::filesystem_error& e) {
+            ImGui::Text("Error reading directory");
+        }
+        
+        ImGui::End();
+
+        // Editor window (takes remaining space)
+        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + 250, viewport->WorkPos.y));
+        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - 250, viewport->WorkSize.y));
 
         // --- C. Set strict flags to lock the window ---
         ImGuiWindowFlags window_flags = 0;
