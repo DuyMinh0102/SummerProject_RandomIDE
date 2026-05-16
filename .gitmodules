@@ -7,3 +7,6 @@
 [submodule "vendor/ImGuiColorTextEdit"]
 	path = vendor/ImGuiColorTextEdit
 	url = https://github.com/BalazsJako/ImGuiColorTextEdit.git
+[submodule "vendor/vendor/glfw"]
+	path = vendor/vendor/glfw
+	url = https://github.com/glfw/glfw.git

@@ -43,19 +43,19 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = D:\CMake\bin\cmake.exe
+CMAKE_COMMAND = "C:\Program Files\CMake\bin\cmake.exe"
 
 # The command to remove a file.
-RM = D:\CMake\bin\cmake.exe -E rm -f
+RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\Minhh\SummerProject_RandomIDE
+CMAKE_SOURCE_DIR = C:\Users\tungl\idkIDE\SummerProject_RandomIDE
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\Minhh\SummerProject_RandomIDE\build
+CMAKE_BINARY_DIR = C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build
 
 # Utility rule file for update_mappings.
 
@@ -66,8 +66,8 @@ include vendor/glfw/src/CMakeFiles/update_mappings.dir/compiler_depend.make
 include vendor/glfw/src/CMakeFiles/update_mappings.dir/progress.make
 
 vendor/glfw/src/CMakeFiles/update_mappings:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Updating gamepad mappings from upstream repository"
-	cd /d D:\Minhh\SummerProject_RandomIDE\vendor\glfw\src && D:\CMake\bin\cmake.exe -P D:/Minhh/SummerProject_RandomIDE/vendor/glfw/CMake/GenerateMappings.cmake mappings.h.in mappings.h
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Updating gamepad mappings from upstream repository"
+	cd /d C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\glfw\src && "C:\Program Files\CMake\bin\cmake.exe" -P C:/Users/tungl/idkIDE/SummerProject_RandomIDE/vendor/glfw/CMake/GenerateMappings.cmake mappings.h.in mappings.h
 
 vendor/glfw/src/CMakeFiles/update_mappings.dir/codegen:
 .PHONY : vendor/glfw/src/CMakeFiles/update_mappings.dir/codegen
@@ -81,10 +81,10 @@ vendor/glfw/src/CMakeFiles/update_mappings.dir/build: update_mappings
 .PHONY : vendor/glfw/src/CMakeFiles/update_mappings.dir/build
 
 vendor/glfw/src/CMakeFiles/update_mappings.dir/clean:
-	cd /d D:\Minhh\SummerProject_RandomIDE\build\vendor\glfw\src && $(CMAKE_COMMAND) -P CMakeFiles\update_mappings.dir\cmake_clean.cmake
+	cd /d C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\vendor\glfw\src && $(CMAKE_COMMAND) -P CMakeFiles\update_mappings.dir\cmake_clean.cmake
 .PHONY : vendor/glfw/src/CMakeFiles/update_mappings.dir/clean
 
 vendor/glfw/src/CMakeFiles/update_mappings.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\Minhh\SummerProject_RandomIDE D:\Minhh\SummerProject_RandomIDE\vendor\glfw\src D:\Minhh\SummerProject_RandomIDE\build D:\Minhh\SummerProject_RandomIDE\build\vendor\glfw\src D:\Minhh\SummerProject_RandomIDE\build\vendor\glfw\src\CMakeFiles\update_mappings.dir\DependInfo.cmake "--color=$(COLOR)" update_mappings
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\tungl\idkIDE\SummerProject_RandomIDE C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\glfw\src C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\vendor\glfw\src C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\vendor\glfw\src\CMakeFiles\update_mappings.dir\DependInfo.cmake "--color=$(COLOR)" update_mappings
 .PHONY : vendor/glfw/src/CMakeFiles/update_mappings.dir/depend
 

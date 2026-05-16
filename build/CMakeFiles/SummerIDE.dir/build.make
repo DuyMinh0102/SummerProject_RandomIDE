@@ -43,19 +43,19 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = D:\CMake\bin\cmake.exe
+CMAKE_COMMAND = "C:\Program Files\CMake\bin\cmake.exe"
 
 # The command to remove a file.
-RM = D:\CMake\bin\cmake.exe -E rm -f
+RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\Minhh\SummerProject_RandomIDE
+CMAKE_SOURCE_DIR = C:\Users\tungl\idkIDE\SummerProject_RandomIDE
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\Minhh\SummerProject_RandomIDE\build
+CMAKE_BINARY_DIR = C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/SummerIDE.dir/depend.make
@@ -73,138 +73,138 @@ CMakeFiles/SummerIDE.dir/codegen:
 
 CMakeFiles/SummerIDE.dir/src/main.cpp.obj: CMakeFiles/SummerIDE.dir/flags.make
 CMakeFiles/SummerIDE.dir/src/main.cpp.obj: CMakeFiles/SummerIDE.dir/includes_CXX.rsp
-CMakeFiles/SummerIDE.dir/src/main.cpp.obj: D:/Minhh/SummerProject_RandomIDE/src/main.cpp
+CMakeFiles/SummerIDE.dir/src/main.cpp.obj: C:/Users/tungl/idkIDE/SummerProject_RandomIDE/src/main.cpp
 CMakeFiles/SummerIDE.dir/src/main.cpp.obj: CMakeFiles/SummerIDE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/SummerIDE.dir/src/main.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/src/main.cpp.obj -MF CMakeFiles\SummerIDE.dir\src\main.cpp.obj.d -o CMakeFiles\SummerIDE.dir\src\main.cpp.obj -c D:\Minhh\SummerProject_RandomIDE\src\main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/SummerIDE.dir/src/main.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/src/main.cpp.obj -MF CMakeFiles\SummerIDE.dir\src\main.cpp.obj.d -o CMakeFiles\SummerIDE.dir\src\main.cpp.obj -c C:\Users\tungl\idkIDE\SummerProject_RandomIDE\src\main.cpp
 
 CMakeFiles/SummerIDE.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SummerIDE.dir/src/main.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Minhh\SummerProject_RandomIDE\src\main.cpp > CMakeFiles\SummerIDE.dir\src\main.cpp.i
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tungl\idkIDE\SummerProject_RandomIDE\src\main.cpp > CMakeFiles\SummerIDE.dir\src\main.cpp.i
 
 CMakeFiles/SummerIDE.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SummerIDE.dir/src/main.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Minhh\SummerProject_RandomIDE\src\main.cpp -o CMakeFiles\SummerIDE.dir\src\main.cpp.s
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tungl\idkIDE\SummerProject_RandomIDE\src\main.cpp -o CMakeFiles\SummerIDE.dir\src\main.cpp.s
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.obj: CMakeFiles/SummerIDE.dir/flags.make
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.obj: CMakeFiles/SummerIDE.dir/includes_CXX.rsp
-CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.obj: D:/Minhh/SummerProject_RandomIDE/vendor/imgui/backends/imgui_impl_glfw.cpp
+CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.obj: C:/Users/tungl/idkIDE/SummerProject_RandomIDE/vendor/imgui/backends/imgui_impl_glfw.cpp
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.obj: CMakeFiles/SummerIDE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_glfw.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_glfw.cpp.obj -c D:\Minhh\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_glfw.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_glfw.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_glfw.cpp.obj -c C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_glfw.cpp
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Minhh\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_glfw.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_glfw.cpp.i
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_glfw.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_glfw.cpp.i
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_glfw.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Minhh\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_glfw.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_glfw.cpp.s
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_glfw.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_glfw.cpp.s
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.obj: CMakeFiles/SummerIDE.dir/flags.make
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.obj: CMakeFiles/SummerIDE.dir/includes_CXX.rsp
-CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.obj: D:/Minhh/SummerProject_RandomIDE/vendor/imgui/backends/imgui_impl_opengl3.cpp
+CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.obj: C:/Users/tungl/idkIDE/SummerProject_RandomIDE/vendor/imgui/backends/imgui_impl_opengl3.cpp
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.obj: CMakeFiles/SummerIDE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_opengl3.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_opengl3.cpp.obj -c D:\Minhh\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_opengl3.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_opengl3.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_opengl3.cpp.obj -c C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_opengl3.cpp
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Minhh\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_opengl3.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_opengl3.cpp.i
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_opengl3.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_opengl3.cpp.i
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SummerIDE.dir/vendor/imgui/backends/imgui_impl_opengl3.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Minhh\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_opengl3.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_opengl3.cpp.s
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\backends\imgui_impl_opengl3.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\backends\imgui_impl_opengl3.cpp.s
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.obj: CMakeFiles/SummerIDE.dir/flags.make
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.obj: CMakeFiles/SummerIDE.dir/includes_CXX.rsp
-CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.obj: D:/Minhh/SummerProject_RandomIDE/vendor/imgui/imgui.cpp
+CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.obj: C:/Users/tungl/idkIDE/SummerProject_RandomIDE/vendor/imgui/imgui.cpp
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.obj: CMakeFiles/SummerIDE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui.cpp.obj -c D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui.cpp.obj -c C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui.cpp
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui.cpp.i
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui.cpp.i
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SummerIDE.dir/vendor/imgui/imgui.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui.cpp.s
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui.cpp.s
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.obj: CMakeFiles/SummerIDE.dir/flags.make
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.obj: CMakeFiles/SummerIDE.dir/includes_CXX.rsp
-CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.obj: D:/Minhh/SummerProject_RandomIDE/vendor/imgui/imgui_demo.cpp
+CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.obj: C:/Users/tungl/idkIDE/SummerProject_RandomIDE/vendor/imgui/imgui_demo.cpp
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.obj: CMakeFiles/SummerIDE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_demo.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_demo.cpp.obj -c D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_demo.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_demo.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_demo.cpp.obj -c C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_demo.cpp
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_demo.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_demo.cpp.i
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_demo.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_demo.cpp.i
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_demo.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_demo.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_demo.cpp.s
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_demo.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_demo.cpp.s
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.obj: CMakeFiles/SummerIDE.dir/flags.make
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.obj: CMakeFiles/SummerIDE.dir/includes_CXX.rsp
-CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.obj: D:/Minhh/SummerProject_RandomIDE/vendor/imgui/imgui_draw.cpp
+CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.obj: C:/Users/tungl/idkIDE/SummerProject_RandomIDE/vendor/imgui/imgui_draw.cpp
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.obj: CMakeFiles/SummerIDE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_draw.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_draw.cpp.obj -c D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_draw.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_draw.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_draw.cpp.obj -c C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_draw.cpp
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_draw.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_draw.cpp.i
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_draw.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_draw.cpp.i
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_draw.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_draw.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_draw.cpp.s
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_draw.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_draw.cpp.s
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.obj: CMakeFiles/SummerIDE.dir/flags.make
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.obj: CMakeFiles/SummerIDE.dir/includes_CXX.rsp
-CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.obj: D:/Minhh/SummerProject_RandomIDE/vendor/imgui/imgui_tables.cpp
+CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.obj: C:/Users/tungl/idkIDE/SummerProject_RandomIDE/vendor/imgui/imgui_tables.cpp
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.obj: CMakeFiles/SummerIDE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_tables.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_tables.cpp.obj -c D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_tables.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_tables.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_tables.cpp.obj -c C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_tables.cpp
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_tables.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_tables.cpp.i
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_tables.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_tables.cpp.i
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_tables.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_tables.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_tables.cpp.s
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_tables.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_tables.cpp.s
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.obj: CMakeFiles/SummerIDE.dir/flags.make
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.obj: CMakeFiles/SummerIDE.dir/includes_CXX.rsp
-CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.obj: D:/Minhh/SummerProject_RandomIDE/vendor/imgui/imgui_widgets.cpp
+CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.obj: C:/Users/tungl/idkIDE/SummerProject_RandomIDE/vendor/imgui/imgui_widgets.cpp
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.obj: CMakeFiles/SummerIDE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_widgets.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_widgets.cpp.obj -c D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_widgets.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_widgets.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_widgets.cpp.obj -c C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_widgets.cpp
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_widgets.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_widgets.cpp.i
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_widgets.cpp > CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_widgets.cpp.i
 
 CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SummerIDE.dir/vendor/imgui/imgui_widgets.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Minhh\SummerProject_RandomIDE\vendor\imgui\imgui_widgets.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_widgets.cpp.s
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\imgui\imgui_widgets.cpp -o CMakeFiles\SummerIDE.dir\vendor\imgui\imgui_widgets.cpp.s
 
 CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.obj: CMakeFiles/SummerIDE.dir/flags.make
 CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.obj: CMakeFiles/SummerIDE.dir/includes_CXX.rsp
-CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.obj: D:/Minhh/SummerProject_RandomIDE/vendor/ImGuiColorTextEdit/TextEditor.cpp
+CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.obj: C:/Users/tungl/idkIDE/SummerProject_RandomIDE/vendor/ImGuiColorTextEdit/TextEditor.cpp
 CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.obj: CMakeFiles/SummerIDE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\ImGuiColorTextEdit\TextEditor.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\ImGuiColorTextEdit\TextEditor.cpp.obj -c D:\Minhh\SummerProject_RandomIDE\vendor\ImGuiColorTextEdit\TextEditor.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.obj -MF CMakeFiles\SummerIDE.dir\vendor\ImGuiColorTextEdit\TextEditor.cpp.obj.d -o CMakeFiles\SummerIDE.dir\vendor\ImGuiColorTextEdit\TextEditor.cpp.obj -c C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\ImGuiColorTextEdit\TextEditor.cpp
 
 CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E D:\Minhh\SummerProject_RandomIDE\vendor\ImGuiColorTextEdit\TextEditor.cpp > CMakeFiles\SummerIDE.dir\vendor\ImGuiColorTextEdit\TextEditor.cpp.i
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\ImGuiColorTextEdit\TextEditor.cpp > CMakeFiles\SummerIDE.dir\vendor\ImGuiColorTextEdit\TextEditor.cpp.i
 
 CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SummerIDE.dir/vendor/ImGuiColorTextEdit/TextEditor.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S D:\Minhh\SummerProject_RandomIDE\vendor\ImGuiColorTextEdit\TextEditor.cpp -o CMakeFiles\SummerIDE.dir\vendor\ImGuiColorTextEdit\TextEditor.cpp.s
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\ImGuiColorTextEdit\TextEditor.cpp -o CMakeFiles\SummerIDE.dir\vendor\ImGuiColorTextEdit\TextEditor.cpp.s
 
 # Object files for target SummerIDE
 SummerIDE_OBJECTS = \
@@ -235,7 +235,7 @@ SummerIDE.exe: vendor/glfw/src/libglfw3.a
 SummerIDE.exe: CMakeFiles/SummerIDE.dir/linkLibs.rsp
 SummerIDE.exe: CMakeFiles/SummerIDE.dir/objects1.rsp
 SummerIDE.exe: CMakeFiles/SummerIDE.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable SummerIDE.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable SummerIDE.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\SummerIDE.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -247,6 +247,6 @@ CMakeFiles/SummerIDE.dir/clean:
 .PHONY : CMakeFiles/SummerIDE.dir/clean
 
 CMakeFiles/SummerIDE.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\Minhh\SummerProject_RandomIDE D:\Minhh\SummerProject_RandomIDE D:\Minhh\SummerProject_RandomIDE\build D:\Minhh\SummerProject_RandomIDE\build D:\Minhh\SummerProject_RandomIDE\build\CMakeFiles\SummerIDE.dir\DependInfo.cmake "--color=$(COLOR)" SummerIDE
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\tungl\idkIDE\SummerProject_RandomIDE C:\Users\tungl\idkIDE\SummerProject_RandomIDE C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\CMakeFiles\SummerIDE.dir\DependInfo.cmake "--color=$(COLOR)" SummerIDE
 .PHONY : CMakeFiles/SummerIDE.dir/depend
 

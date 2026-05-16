@@ -1,0 +1,21 @@
+# Build folders
+build/
+out/
+bin/
+
+# CMake specific files
+CMakeCache.txt
+CMakeFiles/
+*.cmake
+Makefile
+
+# VS Code specific files
+.vscode/
+
+# Compiled files
+*.exe
+*.dll
+*.lib
+*.obj
+*.o
+*.a

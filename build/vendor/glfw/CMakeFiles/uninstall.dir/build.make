@@ -43,19 +43,19 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = D:\CMake\bin\cmake.exe
+CMAKE_COMMAND = "C:\Program Files\CMake\bin\cmake.exe"
 
 # The command to remove a file.
-RM = D:\CMake\bin\cmake.exe -E rm -f
+RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\Minhh\SummerProject_RandomIDE
+CMAKE_SOURCE_DIR = C:\Users\tungl\idkIDE\SummerProject_RandomIDE
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\Minhh\SummerProject_RandomIDE\build
+CMAKE_BINARY_DIR = C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build
 
 # Utility rule file for uninstall.
 
@@ -66,7 +66,7 @@ include vendor/glfw/CMakeFiles/uninstall.dir/compiler_depend.make
 include vendor/glfw/CMakeFiles/uninstall.dir/progress.make
 
 vendor/glfw/CMakeFiles/uninstall:
-	cd /d D:\Minhh\SummerProject_RandomIDE\build\vendor\glfw && D:\CMake\bin\cmake.exe -P D:/Minhh/SummerProject_RandomIDE/build/vendor/glfw/cmake_uninstall.cmake
+	cd /d C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\vendor\glfw && "C:\Program Files\CMake\bin\cmake.exe" -P C:/Users/tungl/idkIDE/SummerProject_RandomIDE/build/vendor/glfw/cmake_uninstall.cmake
 
 vendor/glfw/CMakeFiles/uninstall.dir/codegen:
 .PHONY : vendor/glfw/CMakeFiles/uninstall.dir/codegen
@@ -80,10 +80,10 @@ vendor/glfw/CMakeFiles/uninstall.dir/build: uninstall
 .PHONY : vendor/glfw/CMakeFiles/uninstall.dir/build
 
 vendor/glfw/CMakeFiles/uninstall.dir/clean:
-	cd /d D:\Minhh\SummerProject_RandomIDE\build\vendor\glfw && $(CMAKE_COMMAND) -P CMakeFiles\uninstall.dir\cmake_clean.cmake
+	cd /d C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\vendor\glfw && $(CMAKE_COMMAND) -P CMakeFiles\uninstall.dir\cmake_clean.cmake
 .PHONY : vendor/glfw/CMakeFiles/uninstall.dir/clean
 
 vendor/glfw/CMakeFiles/uninstall.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" D:\Minhh\SummerProject_RandomIDE D:\Minhh\SummerProject_RandomIDE\vendor\glfw D:\Minhh\SummerProject_RandomIDE\build D:\Minhh\SummerProject_RandomIDE\build\vendor\glfw D:\Minhh\SummerProject_RandomIDE\build\vendor\glfw\CMakeFiles\uninstall.dir\DependInfo.cmake "--color=$(COLOR)" uninstall
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\tungl\idkIDE\SummerProject_RandomIDE C:\Users\tungl\idkIDE\SummerProject_RandomIDE\vendor\glfw C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\vendor\glfw C:\Users\tungl\idkIDE\SummerProject_RandomIDE\build\vendor\glfw\CMakeFiles\uninstall.dir\DependInfo.cmake "--color=$(COLOR)" uninstall
 .PHONY : vendor/glfw/CMakeFiles/uninstall.dir/depend
 
