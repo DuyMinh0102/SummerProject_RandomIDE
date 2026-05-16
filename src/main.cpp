@@ -34,7 +34,9 @@ int main() {
         ImGui::NewFrame();
 
         // 5. Build the UI
-        ImGui::Begin("Code Editor", nullptr, ImGuiWindowFlags_NoCollapse);
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
+        ImGui::Begin("Code Editor", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
         // Render the text editor inside this ImGui window
         editor.Render("TextEditor"); 
         ImGui::End();
@@ -50,7 +52,6 @@ int main() {
         
         glfwSwapBuffers(window);
     }
-
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
