@@ -46,6 +46,21 @@ TextEditor::LanguageDefinition GetLanguageFromExtension(const std::string& ext) 
     }
 }
 
+// Tab structure to hold file information
+struct Tab {
+    std::filesystem::path filepath;
+    std::string filename;
+    TextEditor editor;
+    bool is_modified;
+    
+    Tab(const std::filesystem::path& path) : filepath(path), is_modified(false) {
+        filename = path.filename().string();
+        std::string content = ReadFileContent(path);
+        editor.SetText(content);
+        editor.SetLanguageDefinition(GetLanguageFromExtension(path.extension().string()));
+    }
+};
+
 std::string ExecSystemCommand(const std::string& cmd){
     std::array<char, 128> buffer;
     std::string result;
@@ -90,6 +105,10 @@ int main() {
     TextEditor editor;
     editor.SetLanguageDefinition(TextEditor::LanguageDefinition::CPlusPlus());
     editor.SetText("// Write your C++ code here!\n\nint main() {\n    return 0;\n}");
+
+    // Tab management
+    std::vector<std::unique_ptr<Tab>> open_tabs;
+    int active_tab_index = -1;
 
     // File explorer state
     std::filesystem::path current_path = std::filesystem::current_path();
@@ -142,24 +161,41 @@ int main() {
 
                     if (!selection.empty()){
                         std::string filepath = selection[0];
-                        std::string content = ReadFileContent(filepath);
-                        editor.SetText(content);
-
                         std::filesystem::path path_obj(filepath);
-                        editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                        
+                        // Check if file is already open in tabs
+                        bool already_open = false;
+                        int existing_tab_index = -1;
+                        
+                        for (size_t i = 0; i < open_tabs.size(); i++) {
+                            if (open_tabs[i]->filepath == path_obj) {
+                                already_open = true;
+                                existing_tab_index = i;
+                                break;
+                            }
+                        }
+                        
+                        if (already_open) {
+                            // Switch to existing tab
+                            active_tab_index = existing_tab_index;
+                        } else {
+                            // Create new tab
+                            open_tabs.push_back(std::make_unique<Tab>(path_obj));
+                            active_tab_index = open_tabs.size() - 1;
+                        }
+                        
                         current_path = path_obj.parent_path();
+                        show_welcome_screen = false;
                     }
                 }
                 if (ImGui::MenuItem("Save", "Ctrl + S")) {
-                    auto destination = pfd::save_file("Save File As", ".", { "C++ Files", "*.cpp *.h", "All Files", "*" }).result();
-                        
-                    if (!destination.empty()) {
-                        std::string current_text = editor.GetText();
-                        
-                        std::ofstream out_file(destination);
+                    if (active_tab_index >= 0 && active_tab_index < (int)open_tabs.size()) {
+                        std::string current_text = open_tabs[active_tab_index]->editor.GetText();
+                        std::ofstream out_file(open_tabs[active_tab_index]->filepath);
                         if (out_file.is_open()) {
                             out_file << current_text;
                             out_file.close();
+                            open_tabs[active_tab_index]->is_modified = false;
                         }
                     }
                 }
@@ -192,24 +228,41 @@ int main() {
 
                     if (!selection.empty()){
                         std::string filepath = selection[0];
-                        std::string content = ReadFileContent(filepath);
-                        editor.SetText(content);
-
                         std::filesystem::path path_obj(filepath);
-                        editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                        
+                        // Check if file is already open in tabs
+                        bool already_open = false;
+                        int existing_tab_index = -1;
+                        
+                        for (size_t i = 0; i < open_tabs.size(); i++) {
+                            if (open_tabs[i]->filepath == path_obj) {
+                                already_open = true;
+                                existing_tab_index = i;
+                                break;
+                            }
+                        }
+                        
+                        if (already_open) {
+                            // Switch to existing tab
+                            active_tab_index = existing_tab_index;
+                        } else {
+                            // Create new tab
+                            open_tabs.push_back(std::make_unique<Tab>(path_obj));
+                            active_tab_index = open_tabs.size() - 1;
+                        }
+                        
                         current_path = path_obj.parent_path();
+                        show_welcome_screen = false;
                     }
                 }
                 if(ImGui::IsKeyPressed(ImGuiKey_S)){
-                    auto destination = pfd::save_file("Save File As", ".", { "C++ Files", "*.cpp *.h", "All Files", "*" }).result();
-                        
-                    if (!destination.empty()) {
-                        std::string current_text = editor.GetText();
-                        
-                        std::ofstream out_file(destination);
+                    if (active_tab_index >= 0 && active_tab_index < (int)open_tabs.size()) {
+                        std::string current_text = open_tabs[active_tab_index]->editor.GetText();
+                        std::ofstream out_file(open_tabs[active_tab_index]->filepath);
                         if (out_file.is_open()) {
                             out_file << current_text;
                             out_file.close();
+                            open_tabs[active_tab_index]->is_modified = false;
                         }
                     }
                 }
@@ -273,10 +326,29 @@ int main() {
                 auto selection = pfd::open_file("Open File", ".", {"C++ Files", "*.cpp *.h *.hpp", "All Files", "*"}).result();
                 if (!selection.empty()) {
                     std::string filepath = selection[0];
-                    std::string content = ReadFileContent(filepath);
-                    editor.SetText(content);
                     std::filesystem::path path_obj(filepath);
-                    editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                    
+                    // Check if file is already open in tabs
+                    bool already_open = false;
+                    int existing_tab_index = -1;
+                    
+                    for (size_t i = 0; i < open_tabs.size(); i++) {
+                        if (open_tabs[i]->filepath == path_obj) {
+                            already_open = true;
+                            existing_tab_index = i;
+                            break;
+                        }
+                    }
+                    
+                    if (already_open) {
+                        // Switch to existing tab
+                        active_tab_index = existing_tab_index;
+                    } else {
+                        // Create new tab
+                        open_tabs.push_back(std::make_unique<Tab>(path_obj));
+                        active_tab_index = open_tabs.size() - 1;
+                    }
+                    
                     current_path = path_obj.parent_path();
                 }
                 show_welcome_screen = false;
@@ -352,11 +424,10 @@ int main() {
                         if (new_file.is_open()) {
                             new_file.close();
                             
-                            // Open the new file in the editor
-                            std::string content = ReadFileContent(new_file_path);
-                            editor.SetText(content);
-                            std::string ext = new_file_path.extension().string();
-                            editor.SetLanguageDefinition(GetLanguageFromExtension(ext));
+                            // Open the new file in a tab
+                            open_tabs.push_back(std::make_unique<Tab>(new_file_path));
+                            active_tab_index = open_tabs.size() - 1;
+                            show_welcome_screen = false;
                         }
                     }
                     is_creating_new_file = false;
@@ -426,12 +497,29 @@ int main() {
                 } else {
                     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
                     if (ImGui::Selectable(("[FILE] " + filename).c_str())) {
-                        std::string content = ReadFileContent(entry.path());
-                        if (!content.empty()) {
-                            editor.SetText(content);
-                            std::string ext = entry.path().extension().string();
-                            editor.SetLanguageDefinition(GetLanguageFromExtension(ext));
+                        // Check if file is already open in tabs
+                        bool already_open = false;
+                        int existing_tab_index = -1;
+                        
+                        for (size_t i = 0; i < open_tabs.size(); i++) {
+                            if (open_tabs[i]->filepath == entry.path()) {
+                                already_open = true;
+                                existing_tab_index = i;
+                                break;
+                            }
                         }
+                        
+                        if (already_open) {
+                            // Switch to existing tab
+                            active_tab_index = existing_tab_index;
+                        } else {
+                            // Create new tab
+                            open_tabs.push_back(std::make_unique<Tab>(entry.path()));
+                            active_tab_index = open_tabs.size() - 1;
+                        }
+                        
+                        // Hide welcome screen when opening a file
+                        show_welcome_screen = false;
                     }
                     // Right-click context menu for file
                     if (ImGui::BeginPopupContextItem()) {
@@ -561,14 +649,57 @@ int main() {
         }
         ImGui::End();
 
-        // Editor window (takes remaining space)
+        // Tab bar and Editor window (takes remaining space)
+        float tab_bar_height = 30.0f;
         ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
         ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y - terminalHeight));
 
         // --- D. Draw the locked Code Editor window ---
         ImGui::Begin("Code Editor Background", nullptr, window_flags);
         
-        editor.Render("TextEditor"); 
+        // Draw tab bar if there are open tabs
+        if (!open_tabs.empty()) {
+            if (ImGui::BeginTabBar("##TabBar", ImGuiTabBarFlags_Reorderable | ImGuiTabBarFlags_AutoSelectNewTabs)) {
+                for (size_t i = 0; i < open_tabs.size(); i++) {
+                    bool is_open = true;
+                    std::string tab_label = open_tabs[i]->filename;
+                    
+                    // Add modified indicator
+                    if (open_tabs[i]->is_modified) {
+                        tab_label += " *";
+                    }
+                    
+                    // Add close button to tab label
+                    tab_label += "  ";
+                    
+                    if (ImGui::BeginTabItem(tab_label.c_str(), &is_open, ImGuiTabItemFlags_None)) {
+                        active_tab_index = i;
+                        ImGui::EndTabItem();
+                    }
+                    
+                    // Handle tab close
+                    if (!is_open) {
+                        open_tabs.erase(open_tabs.begin() + i);
+                        if (active_tab_index >= (int)open_tabs.size()) {
+                            active_tab_index = open_tabs.size() - 1;
+                        }
+                        if (open_tabs.empty()) {
+                            active_tab_index = -1;
+                            show_welcome_screen = true;
+                        }
+                        i--; // Adjust index after erasing
+                    }
+                }
+                ImGui::EndTabBar();
+            }
+            
+            ImGui::Separator();
+            
+            // Render the active tab's editor
+            if (active_tab_index >= 0 && active_tab_index < (int)open_tabs.size()) {
+                open_tabs[active_tab_index]->editor.Render("TextEditor");
+            }
+        }
         
         ImGui::End();
 
