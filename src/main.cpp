@@ -99,11 +99,17 @@ int main() {
     float separator_pos = 250.0f;
     bool is_dragging_separator = false;
 
+<<<<<<< HEAD
     // Terminal state
     std::vector<std::string> terminal_log;
     char terminal_input[256] = "";
     terminal_log.push_back("IDE Terminal initialized...");
     terminal_log.push_back("Type 'help' for a list of commands.");
+=======
+    // New file inline creation state
+    bool is_creating_new_file = false;
+    char new_file_name_buffer[256] = "";
+>>>>>>> 13bab469a43b9814de00c82dc4d662a775316c8c
 
     // 4. The Application / Render Loop
     while (!glfwWindowShouldClose(window)) {
@@ -131,6 +137,7 @@ int main() {
 
                         std::filesystem::path path_obj(filepath);
                         editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                        current_path = path_obj.parent_path();
                     }
                 }
                 if (ImGui::MenuItem("Save", "Ctrl + S")) {
@@ -180,6 +187,7 @@ int main() {
 
                         std::filesystem::path path_obj(filepath);
                         editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                        current_path = path_obj.parent_path();
                     }
                 }
                 if(ImGui::IsKeyPressed(ImGuiKey_S)){
@@ -219,12 +227,49 @@ int main() {
             }
         }
         ImGui::SameLine();
+        if (ImGui::Button("New File")) {
+            is_creating_new_file = true;
+            new_file_name_buffer[0] = '\0';
+        }
+        ImGui::SameLine();
         ImGui::Text(current_path.string().c_str());
         
         ImGui::Separator();
         
         // List directories and files
         try {
+            // Show inline new file input if creating new file
+            if (is_creating_new_file) {
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
+                ImGui::Text("[FILE] ");
+                ImGui::SameLine();
+                ImGui::SetKeyboardFocusHere();
+                if (ImGui::InputText("##newfilename", new_file_name_buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
+                    if (strlen(new_file_name_buffer) > 0) {
+                        std::filesystem::path new_file_path = current_path / new_file_name_buffer;
+                        
+                        // Create the file
+                        std::ofstream new_file(new_file_path);
+                        if (new_file.is_open()) {
+                            new_file.close();
+                            
+                            // Open the new file in the editor
+                            std::string content = ReadFileContent(new_file_path);
+                            editor.SetText(content);
+                            std::string ext = new_file_path.extension().string();
+                            editor.SetLanguageDefinition(GetLanguageFromExtension(ext));
+                        }
+                    }
+                    is_creating_new_file = false;
+                }
+                ImGui::PopStyleColor();
+                
+                // Cancel on Escape
+                if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+                    is_creating_new_file = false;
+                }
+            }
+            
             for (const auto& entry : std::filesystem::directory_iterator(current_path)) {
                 std::string filename = entry.path().filename().string();
                 bool is_directory = entry.is_directory();
