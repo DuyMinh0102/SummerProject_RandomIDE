@@ -10,6 +10,9 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <cstring>
+#include <array>
+#include <memory>
 
 // Helper function to read file content
 std::string ReadFileContent(const std::filesystem::path& filepath) {
@@ -39,8 +42,34 @@ TextEditor::LanguageDefinition GetLanguageFromExtension(const std::string& ext) 
     } else if (ext == ".as") {
         return TextEditor::LanguageDefinition::AngelScript();
     } else {
-        return TextEditor::LanguageDefinition::CPlusPlus(); // Default
+        return TextEditor::LanguageDefinition::CPlusPlus();
     }
+}
+
+std::string ExecSystemCommand(const std::string& cmd){
+    std::array<char, 128> buffer;
+    std::string result;
+
+#ifdef _WIN32
+    #define POPEN _popen
+    #define PCLOSE _pclose
+#else
+    #define POPEN popen
+    #define PCLOSE pclose
+#endif
+
+    std::string fullCmd = cmd + "2>&1";
+
+    std::unique_ptr<FILE, decltype(&PCLOSE)> pipe(POPEN(fullCmd.c_str(), "r"), PCLOSE);
+    if(!pipe){
+        return "Error: failed to open system pipe.";
+    }
+
+    while(fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+        result += buffer.data();
+
+        
+    return result;
 }
 
 int main() {
@@ -70,6 +99,11 @@ int main() {
     float separator_pos = 250.0f;
     bool is_dragging_separator = false;
 
+    // Terminal state
+    std::vector<std::string> terminal_log;
+    char terminal_input[256] = "";
+    terminal_log.push_back("IDE Terminal initialized...");
+    terminal_log.push_back("Type 'help' for a list of commands.");
     // New file inline creation state
     bool is_creating_new_file = false;
     char new_file_name_buffer[256] = "";
@@ -348,16 +382,99 @@ int main() {
             is_dragging_separator = false;
         }
 
-        // Editor window (takes remaining space)
-        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
-        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y));
+        // Terminal
+        float terminalHeight = 200.0f;
 
-        // --- C. Set strict flags to lock the window ---
+        float terminalYPos = viewport->WorkPos.y + viewport->WorkSize.y - terminalHeight;
+
+        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, terminalYPos));
+
+        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, terminalHeight));
+
+               // --- C. Set strict flags to lock the window ---
         ImGuiWindowFlags window_flags = 0;
         window_flags |= ImGuiWindowFlags_NoTitleBar;      // Hide the ImGui title
         window_flags |= ImGuiWindowFlags_NoCollapse;      // Prevent minimizing
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus; 
-        window_flags |= ImGuiWindowFlags_NoNavFocus;      
+        window_flags |= ImGuiWindowFlags_NoNavFocus;     
+
+        // Draw terminal
+        ImGui::Begin("Terminal", nullptr, window_flags);
+        
+        const float footerHeightToReserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+
+        if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footerHeightToReserve), false, ImGuiWindowFlags_HorizontalScrollbar)){
+            for (const std::string& line : terminal_log){
+                if (line.rfind("> ", 0) == 0){
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 1.0f, 0.4f, 1.0f));
+                    ImGui::TextUnformatted(line.c_str());
+                    ImGui::PopStyleColor();
+                }
+                else{
+                    ImGui::TextUnformatted(line.c_str());
+                }
+            }
+
+            if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()){
+                ImGui::SetScrollHereY(1.0f);
+            }
+        }
+        ImGui::EndChild();
+        ImGui::Separator();
+
+        bool reclaimFocus = false;
+        ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue;
+
+        ImGui::PushItemWidth(-1);
+
+        if(ImGui::InputText("##terminal_input", terminal_input, IM_ARRAYSIZE(terminal_input), inputFlags)){
+            std::string command = terminal_input;
+
+            if (!command.empty()){
+                terminal_log.push_back("> " + command);
+
+                if (command == "clear"){
+                    terminal_log.clear();
+                }
+                else if(command.rfind("cd ", 0) == 0){
+                    std::string newDir = command.substr(3);
+
+                    try{
+                        std::filesystem::current_path(newDir);
+
+                        current_path= std::filesystem::current_path();
+                        terminal_log.push_back(current_path.string());  
+                    }
+                    catch (const std::exception& e){
+                        terminal_log.push_back(std::string("cd error: ") + e.what());
+                    }
+                }
+                else{
+                    std::string output = ExecSystemCommand(command);
+
+                    std::istringstream stream(output);
+                    std::string line;
+                    while(std::getline(stream, line)){
+                        if (!line.empty() && line.back() == '\n') line.pop_back();
+                        terminal_log.push_back(line); 
+                    }
+                }
+            }
+
+            strcpy(terminal_input, "");
+            reclaimFocus = true;
+        }
+        ImGui::PopItemWidth();
+
+        ImGui::SetItemDefaultFocus();
+        if (reclaimFocus){
+            ImGui::SetKeyboardFocusHere(-1);
+        }
+        ImGui::End();
+
+        // Editor window (takes remaining space)
+        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
+        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y - terminalHeight));
 
         // --- D. Draw the locked Code Editor window ---
         ImGui::Begin("Code Editor Background", nullptr, window_flags);
