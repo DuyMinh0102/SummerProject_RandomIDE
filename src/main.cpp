@@ -118,6 +118,9 @@ int main() {
     std::filesystem::path selected_item_path;
     bool selected_item_is_directory = false;
 
+    // Welcome screen state
+    bool show_welcome_screen = true;
+
     // 4. The Application / Render Loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents(); // Catch keypresses and mouse movement
@@ -216,6 +219,84 @@ int main() {
             }
 
             ImGui::EndMainMenuBar();
+        }
+
+        // Welcome Screen (VSCode-like)
+        if (show_welcome_screen) {
+            const ImGuiViewport* viewport = ImGui::GetMainViewport();
+            ImGui::SetNextWindowPos(viewport->WorkPos);
+            ImGui::SetNextWindowSize(viewport->WorkSize);
+            ImGuiWindowFlags welcome_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | 
+                                           ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+            
+            ImGui::Begin("Welcome Screen", nullptr, welcome_flags);
+            
+            // Center content
+            ImVec2 window_size = ImGui::GetWindowSize();
+            ImVec2 center_pos = ImVec2(window_size.x * 0.5f, window_size.y * 0.5f);
+            
+            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 1.0f));
+            
+            // Title
+            ImGui::SetCursorPosX(center_pos.x - ImGui::CalcTextSize("Welcome").x * 0.5f);
+            ImGui::SetCursorPosY(center_pos.y - 150);
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
+            ImGui::Text("Welcome");
+            ImGui::PopStyleColor();
+            
+            // Subtitle
+            ImGui::SetCursorPosX(center_pos.x - ImGui::CalcTextSize("RandomIDE - Start").x * 0.5f);
+            ImGui::SetCursorPosY(center_pos.y - 120);
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+            ImGui::Text("RandomIDE - Start");
+            ImGui::PopStyleColor();
+            
+            // Button styling
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
+            ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
+            
+            // New File Button
+            float button_width = 200;
+            ImGui::SetCursorPosX(center_pos.x - button_width * 0.5f);
+            ImGui::SetCursorPosY(center_pos.y - 50);
+            if (ImGui::Button("New File", ImVec2(button_width, 40))) {
+                is_creating_new_file = true;
+                new_file_name_buffer[0] = '\0';
+                show_welcome_screen = false;
+            }
+            
+            // Open File Button
+            ImGui::SetCursorPosX(center_pos.x - button_width * 0.5f);
+            ImGui::SetCursorPosY(center_pos.y + 10);
+            if (ImGui::Button("Open File", ImVec2(button_width, 40))) {
+                auto selection = pfd::open_file("Open File", ".", {"C++ Files", "*.cpp *.h *.hpp", "All Files", "*"}).result();
+                if (!selection.empty()) {
+                    std::string filepath = selection[0];
+                    std::string content = ReadFileContent(filepath);
+                    editor.SetText(content);
+                    std::filesystem::path path_obj(filepath);
+                    editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                    current_path = path_obj.parent_path();
+                }
+                show_welcome_screen = false;
+            }
+            
+            // Open Folder Button
+            ImGui::SetCursorPosX(center_pos.x - button_width * 0.5f);
+            ImGui::SetCursorPosY(center_pos.y + 70);
+            if (ImGui::Button("Open Folder", ImVec2(button_width, 40))) {
+                auto folder = pfd::select_folder("Open Folder", ".").result();
+                if (!folder.empty()) {
+                    current_path = folder;
+                }
+                show_welcome_screen = false;
+            }
+            
+            ImGui::PopStyleColor(3); // Pop button colors
+            ImGui::PopStyleColor(); // Pop window bg
+            
+            ImGui::End();
         }
 
         // Sidebar Explorer
