@@ -34,11 +34,38 @@ int main() {
         ImGui::NewFrame();
 
         // 5. Build the UI
-        ImGui::SetNextWindowPos(ImVec2(0, 0));
-        ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
-        ImGui::Begin("Code Editor", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-        // Render the text editor inside this ImGui window
+
+        // Main Menu Bar
+        if (ImGui::BeginMainMenuBar()){
+            if (ImGui::BeginMenu("File")){
+                if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+                ImGui::Separator();
+                if(ImGui::MenuItem("Exit", "Alt+F4")) {glfwSetWindowShouldClose(window, true); }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMainMenuBar();
+        }
+
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->WorkPos);
+        ImGui::SetNextWindowSize(viewport->WorkSize);
+
+        // --- C. Set strict flags to lock the window ---
+        ImGuiWindowFlags window_flags = 0;
+        window_flags |= ImGuiWindowFlags_NoTitleBar;      // Hide the ImGui title
+        window_flags |= ImGuiWindowFlags_NoCollapse;      // Prevent minimizing
+        window_flags |= ImGuiWindowFlags_NoResize;        // Prevent user resizing
+        window_flags |= ImGuiWindowFlags_NoMove;          // Prevent dragging
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus; 
+        window_flags |= ImGuiWindowFlags_NoNavFocus;      
+
+        // --- D. Draw the locked Code Editor window ---
+        ImGui::Begin("Code Editor Background", nullptr, window_flags);
+        
+        // Render the actual text editing widget inside this locked space
         editor.Render("TextEditor"); 
+        
         ImGui::End();
 
         // 6. Render the frame to the screen
@@ -52,6 +79,7 @@ int main() {
         
         glfwSwapBuffers(window);
     }
+
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
