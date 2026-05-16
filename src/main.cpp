@@ -6,13 +6,12 @@
 #include "TextEditor.h"
 
 int main() {
-    return 0;
 
     // 1. Initialize Windowing (GLFW) & Graphics Context
     if (!glfwInit()) return -1;
     GLFWwindow* window = glfwCreateWindow(1280, 720, "My ImGui IDE", NULL, NULL);
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+    glfwSwapInterval(1);
 
     // 2. Initialize Dear ImGui
     IMGUI_CHECKVERSION();
@@ -20,7 +19,7 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
-    // 3. Initialize the Text Editor component
+    // 3. Init editor component
     TextEditor editor;
     editor.SetLanguageDefinition(TextEditor::LanguageDefinition::CPlusPlus());
     editor.SetText("// Write your C++ code here!\n\nint main() {\n    return 0;\n}");
