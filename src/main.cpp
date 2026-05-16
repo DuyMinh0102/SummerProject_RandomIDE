@@ -58,7 +58,7 @@ std::string ExecSystemCommand(const std::string& cmd){
     #define PCLOSE pclose
 #endif
 
-    std::string fullCmd = cmd + "2>&1";
+    std::string fullCmd = cmd + " 2>&1";
 
     std::unique_ptr<FILE, decltype(&PCLOSE)> pipe(POPEN(fullCmd.c_str(), "r"), PCLOSE);
     if(!pipe){
@@ -224,8 +224,8 @@ int main() {
         // Welcome Screen (VSCode-like)
         if (show_welcome_screen) {
             const ImGuiViewport* viewport = ImGui::GetMainViewport();
-            ImGui::SetNextWindowPos(viewport->WorkPos);
-            ImGui::SetNextWindowSize(viewport->WorkSize);
+            ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
+            ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y - 200.0f));
             ImGuiWindowFlags welcome_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | 
                                            ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
             
@@ -561,16 +561,18 @@ int main() {
         }
         ImGui::End();
 
-        // Editor window (takes remaining space)
-        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
-        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y - terminalHeight));
+        if (!show_welcome_screen){
+            // Editor window (takes remaining space)
+            ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
+            ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y - terminalHeight));
 
-        // --- D. Draw the locked Code Editor window ---
-        ImGui::Begin("Code Editor Background", nullptr, window_flags);
-        
-        editor.Render("TextEditor"); 
-        
-        ImGui::End();
+            // --- D. Draw the locked Code Editor window ---
+            ImGui::Begin("Code Editor Background", nullptr, window_flags);
+            
+            editor.Render("TextEditor"); 
+            
+            ImGui::End();
+        }
 
         // 6. Render the frame to the screen
         ImGui::Render();
