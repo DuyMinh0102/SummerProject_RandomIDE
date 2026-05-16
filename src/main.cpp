@@ -99,17 +99,14 @@ int main() {
     float separator_pos = 250.0f;
     bool is_dragging_separator = false;
 
-<<<<<<< HEAD
     // Terminal state
     std::vector<std::string> terminal_log;
     char terminal_input[256] = "";
     terminal_log.push_back("IDE Terminal initialized...");
     terminal_log.push_back("Type 'help' for a list of commands.");
-=======
     // New file inline creation state
     bool is_creating_new_file = false;
     char new_file_name_buffer[256] = "";
->>>>>>> 13bab469a43b9814de00c82dc4d662a775316c8c
 
     // 4. The Application / Render Loop
     while (!glfwWindowShouldClose(window)) {
