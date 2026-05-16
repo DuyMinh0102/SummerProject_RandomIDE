@@ -312,13 +312,13 @@ int main() {
             ImGui::SetCursorPosX(center_pos.x - button_width * 0.5f);
             ImGui::SetCursorPosY(center_pos.y - 50);
             if (ImGui::Button("New File", ImVec2(button_width, 40))) {
-                is_creating_new_file = true;
-                new_file_name_buffer[0] = '\0';
-                show_welcome_screen = false;
-            } else if (is_creating_new_file) {
+                isCreatingNewFile = true;
+                newFileNameBuffer[0] = '\0';
+                showWelcomeScreen = false;
+            } else if (isCreatingNewFile) {
                 // If user cancels new file creation, go back to welcome screen
                 if (ImGui::IsKeyPressed(ImGuiKey_Escape) || (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsItemActive())) {
-                    show_welcome_screen = true;
+                    showWelcomeScreen = true;
                 }
             } 
             
@@ -352,8 +352,8 @@ int main() {
                         active_tab_index = openTabs.size() - 1;
                     }
                     
-                    current_path = path_obj.parent_path();
-                    show_welcome_screen = false;
+                    current_path = objPath.parent_path();
+                    showWelcomeScreen = false;
                 }
                 // If selection is empty (user cancelled), stay on welcome screen
             }
@@ -365,9 +365,8 @@ int main() {
                 auto folder = pfd::select_folder("Open Folder", ".").result();
                 if (!folder.empty()) {
                     current_path = folder;
-                    show_welcome_screen = false;
+                    showWelcomeScreen = false;
                 }
-                // If folder is empty (user cancelled), stay on welcome screen
             }
             
             ImGui::PopStyleColor(3); // Pop button colors
@@ -441,19 +440,19 @@ int main() {
                 
                 // Cancel on Escape
                 if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-                    is_creating_new_file = false;
+                    isCreatingNewFile = false;
                     // If no tabs are open, go back to welcome screen
-                    if (open_tabs.empty()) {
-                        show_welcome_screen = true;
+                    if (openTabs.empty()) {
+                        showWelcomeScreen = true;
                     }
                 }
                 
                 // Cancel on click outside the input box
                 if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsItemActive()) {
-                    is_creating_new_file = false;
+                    isCreatingNewFile = false;
                     // If no tabs are open, go back to welcome screen
-                    if (open_tabs.empty()) {
-                        show_welcome_screen = true;
+                    if (openTabs.empty()) {
+                        showWelcomeScreen = true;
                     }
                 }
             }
