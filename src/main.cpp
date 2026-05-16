@@ -6,6 +6,8 @@
 #include "TextEditor.h"
 
 int main() {
+    return 0;
+
     // 1. Initialize Windowing (GLFW) & Graphics Context
     if (!glfwInit()) return -1;
     GLFWwindow* window = glfwCreateWindow(1280, 720, "My ImGui IDE", NULL, NULL);

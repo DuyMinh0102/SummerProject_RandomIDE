@@ -1,0 +1,3 @@
+D:\CMake\bin\cmake.exe -E rm -f CMakeFiles\SummerIDE.dir/objects.a
+C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\SummerIDE.dir/objects.a @CMakeFiles\SummerIDE.dir\objects1.rsp
+C:\msys64\ucrt64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\SummerIDE.dir/objects.a -Wl,--no-whole-archive -o SummerIDE.exe -Wl,--out-implib,libSummerIDE.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\SummerIDE.dir\linkLibs.rsp
