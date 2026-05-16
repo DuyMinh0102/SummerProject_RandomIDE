@@ -65,6 +65,10 @@ int main() {
     std::filesystem::path current_path = std::filesystem::current_path();
     std::vector<std::filesystem::path> selected_files;
 
+    // Separator state (initial sidebar width)
+    float separator_pos = 250.0f;
+    bool is_dragging_separator = false;
+
     // 4. The Application / Render Loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents(); // Catch keypresses and mouse movement
@@ -111,14 +115,10 @@ int main() {
         // Sidebar Explorer
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
         
-        // Calculate dynamic sidebar width based on font scale
-        float sidebar_width = 250.0f * io.FontGlobalScale;
-        
         // Set up sidebar window
         ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(ImVec2(sidebar_width, viewport->WorkSize.y));
-        ImGuiWindowFlags sidebar_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | 
-                                        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
+        ImGui::SetNextWindowSize(ImVec2(separator_pos, viewport->WorkSize.y));
+        ImGuiWindowFlags sidebar_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
         
         ImGui::Begin("File Explorer", nullptr, sidebar_flags);
         
@@ -163,16 +163,32 @@ int main() {
         
         ImGui::End();
 
+        // Handle separator dragging (check if mouse is near separator)
+        float separator_x = viewport->WorkPos.x + separator_pos;
+        bool is_near_separator = (io.MousePos.x >= separator_x - 4 && io.MousePos.x <= separator_x + 4);
+        
+        if (is_near_separator || is_dragging_separator) {
+            ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+            if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+                is_dragging_separator = true;
+                separator_pos = io.MousePos.x - viewport->WorkPos.x;
+                // Clamp separator position
+                if (separator_pos < 100.0f) separator_pos = 100.0f;
+                if (separator_pos > viewport->WorkSize.x - 100.0f) separator_pos = viewport->WorkSize.x - 100.0f;
+            }
+        }
+        if (ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
+            is_dragging_separator = false;
+        }
+
         // Editor window (takes remaining space)
-        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + sidebar_width, viewport->WorkPos.y));
-        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - sidebar_width, viewport->WorkSize.y));
+        ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + separator_pos, viewport->WorkPos.y));
+        ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separator_pos, viewport->WorkSize.y));
 
         // --- C. Set strict flags to lock the window ---
         ImGuiWindowFlags window_flags = 0;
         window_flags |= ImGuiWindowFlags_NoTitleBar;      // Hide the ImGui title
         window_flags |= ImGuiWindowFlags_NoCollapse;      // Prevent minimizing
-        window_flags |= ImGuiWindowFlags_NoResize;        // Prevent user resizing
-        window_flags |= ImGuiWindowFlags_NoMove;          // Prevent dragging
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus; 
         window_flags |= ImGuiWindowFlags_NoNavFocus;      
 
