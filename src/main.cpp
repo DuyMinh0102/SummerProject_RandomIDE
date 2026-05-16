@@ -74,6 +74,16 @@ int main() {
     bool is_creating_new_file = false;
     char new_file_name_buffer[256] = "";
 
+    // New folder inline creation state
+    bool is_creating_new_folder = false;
+    char new_folder_name_buffer[256] = "";
+
+    // Context menu state
+    bool show_empty_space_context_menu = false;
+    bool show_item_context_menu = false;
+    std::filesystem::path selected_item_path;
+    bool selected_item_is_directory = false;
+
     // 4. The Application / Render Loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents(); // Catch keypresses and mouse movement
@@ -198,6 +208,19 @@ int main() {
         ImGui::Text(current_path.string().c_str());
         
         ImGui::Separator();
+
+        // Context menu for empty space
+        if (ImGui::BeginPopupContextWindow("##empty_space_context", ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight)) {
+            if (ImGui::MenuItem("New File")) {
+                is_creating_new_file = true;
+                new_file_name_buffer[0] = '\0';
+            }
+            if (ImGui::MenuItem("New Folder")) {
+                is_creating_new_folder = true;
+                new_folder_name_buffer[0] = '\0';
+            }
+            ImGui::EndPopup();
+        }
         
         // List directories and files
         try {
@@ -232,6 +255,29 @@ int main() {
                     is_creating_new_file = false;
                 }
             }
+
+            // Show inline new folder input if creating new folder
+            if (is_creating_new_folder) {
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+                ImGui::Text("[DIR] ");
+                ImGui::SameLine();
+                ImGui::SetKeyboardFocusHere();
+                if (ImGui::InputText("##newfoldername", new_folder_name_buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue)) {
+                    if (strlen(new_folder_name_buffer) > 0) {
+                        std::filesystem::path new_folder_path = current_path / new_folder_name_buffer;
+                        
+                        // Create the folder
+                        std::filesystem::create_directory(new_folder_path);
+                    }
+                    is_creating_new_folder = false;
+                }
+                ImGui::PopStyleColor();
+                
+                // Cancel on Escape
+                if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+                    is_creating_new_folder = false;
+                }
+            }
             
             for (const auto& entry : std::filesystem::directory_iterator(current_path)) {
                 std::string filename = entry.path().filename().string();
@@ -241,6 +287,17 @@ int main() {
                     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
                     if (ImGui::Selectable(("[DIR] " + filename).c_str())) {
                         current_path = entry.path();
+                    }
+                    // Right-click context menu for directory
+                    if (ImGui::BeginPopupContextItem()) {
+                        if (ImGui::MenuItem("Delete")) {
+                            try {
+                                std::filesystem::remove_all(entry.path());
+                            } catch (const std::filesystem::filesystem_error& e) {
+                                // Handle error silently
+                            }
+                        }
+                        ImGui::EndPopup();
                     }
                     ImGui::PopStyleColor();
                 } else {
@@ -252,6 +309,17 @@ int main() {
                             std::string ext = entry.path().extension().string();
                             editor.SetLanguageDefinition(GetLanguageFromExtension(ext));
                         }
+                    }
+                    // Right-click context menu for file
+                    if (ImGui::BeginPopupContextItem()) {
+                        if (ImGui::MenuItem("Delete")) {
+                            try {
+                                std::filesystem::remove(entry.path());
+                            } catch (const std::filesystem::filesystem_error& e) {
+                                // Handle error silently
+                            }
+                        }
+                        ImGui::EndPopup();
                     }
                     ImGui::PopStyleColor();
                 }
