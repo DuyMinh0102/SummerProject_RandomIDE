@@ -288,6 +288,11 @@ int main() {
                 if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
                     is_creating_new_file = false;
                 }
+                
+                // Cancel on click outside the input box
+                if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsItemActive()) {
+                    is_creating_new_file = false;
+                }
             }
 
             // Show inline new folder input if creating new folder
@@ -309,6 +314,11 @@ int main() {
                 
                 // Cancel on Escape
                 if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+                    is_creating_new_folder = false;
+                }
+                
+                // Cancel on click outside the input box
+                if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsItemActive()) {
                     is_creating_new_folder = false;
                 }
             }
