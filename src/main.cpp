@@ -96,6 +96,7 @@ int main() {
 
                         std::filesystem::path path_obj(filepath);
                         editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                        current_path = path_obj.parent_path();
                     }
                 }
                 if (ImGui::MenuItem("Save", "Ctrl + S")) {
@@ -145,6 +146,7 @@ int main() {
 
                         std::filesystem::path path_obj(filepath);
                         editor.SetLanguageDefinition(GetLanguageFromExtension(path_obj.extension().string()));
+                        current_path = path_obj.parent_path();
                     }
                 }
                 if(ImGui::IsKeyPressed(ImGuiKey_S)){
