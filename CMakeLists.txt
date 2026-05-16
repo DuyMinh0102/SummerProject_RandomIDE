@@ -32,3 +32,16 @@ elseif(UNIX AND NOT APPLE)
     find_package(OpenGL REQUIRED)
     target_link_libraries(${PROJECT_NAME} PRIVATE OpenGL::GL m)
 endif()
+
+# 5. Link the libraries
+if(WIN32)
+    # On Windows, we must explicitly link opengl32
+    target_link_libraries(${PROJECT_NAME} PRIVATE glfw opengl32)
+elseif(APPLE)
+    # Mac linking
+    target_link_libraries(${PROJECT_NAME} PRIVATE glfw "-framework OpenGL" "-framework Cocoa" "-framework IOKit" "-framework CoreVideo")
+elseif(UNIX AND NOT APPLE)
+    # Linux linking
+    find_package(OpenGL REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL m)
+endif()
