@@ -15,3 +15,4 @@ Setting up environment:
 - Added open file from explorer
 - Added right click new file and new folder
 - Added cancel creating new file/folder by pressing escape or clicking outside
+

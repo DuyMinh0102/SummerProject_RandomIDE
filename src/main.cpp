@@ -13,6 +13,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+using namespace ImGui;
 
 // Helper function to read file content
 std::string ReadFileContent(const std::filesystem::path &filepath) {
@@ -78,8 +79,9 @@ std::string ExecSystemCommand(const std::string &cmd) {
 
   std::string fullCmd = cmd + " 2>&1";
 
-  std::unique_ptr<FILE, decltype(&PCLOSE)> pipe(POPEN(fullCmd.c_str(), "r"),
-                                                PCLOSE);
+  std::unique_ptr<FILE, int (*)(FILE *)> pipe(POPEN(fullCmd.c_str(), "r"),
+                                              PCLOSE);
+
   if (!pipe) {
     return "Error: failed to open system pipe.";
   }
@@ -91,7 +93,6 @@ std::string ExecSystemCommand(const std::string &cmd) {
 }
 
 int main() {
-
   // 1. Initialize Windowing (GLFW) & Graphics Context
   if (!glfwInit())
     return -1;
@@ -101,7 +102,7 @@ int main() {
 
   // 2. Initialize Dear ImGui
   IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
+  CreateContext();
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
 
@@ -149,16 +150,16 @@ int main() {
     // Start the ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-    ImGuiIO &io = ImGui::GetIO();
+    NewFrame();
+    ImGuiIO &io = GetIO();
 
     // 5. Build the UI
 
     // Main Menu Bar
-    if (ImGui::BeginMainMenuBar()) {
+    if (BeginMainMenuBar()) {
       // Open/Save file
-      if (ImGui::BeginMenu("File")) {
-        if (ImGui::MenuItem("Open", "Ctrl + O")) {
+      if (BeginMenu("File")) {
+        if (MenuItem("Open", "Ctrl + O")) {
           auto selection =
               pfd::open_file("Open File", ".",
                              {"C++ Files", "*.cpp *.h *.hpp", "All Files", "*"})
@@ -193,51 +194,91 @@ int main() {
             showWelcomeScreen = false;
           }
         }
-        if (ImGui::MenuItem("Save", "Ctrl + S")) {
+        if (MenuItem("Save", "Ctrl + S")) {
           if (active_tab_index >= 0 &&
               active_tab_index < (int)openTabs.size()) {
-            std::string currentText =
-                openTabs[active_tab_index]->editor.GetText();
-            std::ofstream outFile(openTabs[active_tab_index]->filepath);
-            if (outFile.is_open()) {
-              outFile << currentText;
-              outFile.close();
-              openTabs[active_tab_index]->is_modified = false;
+            auto &tab = openTabs[active_tab_index];
+            std::string currentText = tab->editor.GetText();
+
+            if (tab->filepath.empty()) {
+              auto destination =
+                  pfd::save_file("Save File", ".", {"All Files", " * "})
+                      .result();
+
+              if (!destination.empty()) {
+                tab->filepath = destination;
+
+                std::ofstream outFile(destination);
+                if (outFile.is_open()) {
+                  outFile << currentText;
+                  outFile.close();
+                  tab->is_modified = false;
+                }
+              }
+            } else {
+              std::ofstream outFile(tab->filepath);
+              if (outFile.is_open()) {
+                outFile << currentText;
+                outFile.close();
+                tab->is_modified = false;
+              }
             }
           }
         }
-        ImGui::Separator();
-        if (ImGui::MenuItem("Exit", "Alt+F4")) {
+        if (MenuItem("Save As", "Ctrl + Shift + S")) {
+          if (active_tab_index >= 0 &&
+              active_tab_index < (int)openTabs.size()) {
+
+            auto &tab = openTabs[active_tab_index];
+            std::string currentText = tab->editor.GetText();
+
+            auto destination =
+                pfd::save_file("Save File", ".", {"All Files", "*"}).result();
+
+            if (!destination.empty()) {
+              tab->filepath = destination;
+
+              std::ofstream outFile(destination);
+              if (outFile.is_open()) {
+                outFile << currentText;
+                outFile.close();
+                tab->is_modified = false;
+              }
+            }
+          }
+        }
+        Separator();
+        if (MenuItem("Exit", "Alt+F4")) {
           glfwSetWindowShouldClose(window, true);
         }
-        ImGui::EndMenu();
+        EndMenu();
       }
 
       // Zoom In/Out
-      if (ImGui::BeginMenu("View")) {
-        if (ImGui::MenuItem("Zoom In", "Ctrl + =")) {
+      if (BeginMenu("View")) {
+        if (MenuItem("Zoom In", "Ctrl + =")) {
           if (io.FontGlobalScale <= 10.0f)
             io.FontGlobalScale += 0.1f;
         }
-        if (ImGui::MenuItem("Zoom Out", "Ctrl + -")) {
+        if (MenuItem("Zoom Out", "Ctrl + -")) {
           if (io.FontGlobalScale >= 0.5f)
             io.FontGlobalScale -= 0.1f;
         }
-        ImGui::EndMenu();
+        EndMenu();
       }
 
       if (io.KeyCtrl) {
-        if (ImGui::IsKeyPressed(ImGuiKey_Equal)) {
+        if (IsKeyPressed(ImGuiKey_Equal)) {
           if (io.FontGlobalScale < 10.0f)
             io.FontGlobalScale += 0.1f;
         }
-        if (ImGui::IsKeyPressed(ImGuiKey_Minus)) {
+        if (IsKeyPressed(ImGuiKey_Minus)) {
           if (io.FontGlobalScale > 0.5f)
             io.FontGlobalScale -= 0.1f;
         }
-        if (ImGui::IsKeyPressed(ImGuiKey_0))
+        if (IsKeyPressed(ImGuiKey_0))
           io.FontGlobalScale = 1.0f;
-        if (ImGui::IsKeyPressed(ImGuiKey_O)) {
+        if (IsKeyPressed(ImGuiKey_O)) {
           auto selection =
               pfd::open_file("Open File", ".",
                              {"C++ Files", "*.cpp *.h *.hpp", "All Files", "*"})
@@ -272,7 +313,7 @@ int main() {
             showWelcomeScreen = false;
           }
         }
-        if (ImGui::IsKeyPressed(ImGuiKey_S)) {
+        if (IsKeyPressed(ImGuiKey_S)) {
           if (active_tab_index >= 0 &&
               active_tab_index < (int)openTabs.size()) {
             std::string currentText =
@@ -287,76 +328,71 @@ int main() {
         }
       }
       if (io.KeyAlt) {
-        if (ImGui::IsKeyPressed(ImGuiKey_F4))
+        if (IsKeyPressed(ImGuiKey_F4))
           glfwSetWindowShouldClose(window, true);
       }
 
-      ImGui::EndMainMenuBar();
+      EndMainMenuBar();
     }
 
     // Welcome Screen (VSCode-like)
     if (showWelcomeScreen) {
-      const ImGuiViewport *viewport = ImGui::GetMainViewport();
-      ImGui::SetNextWindowPos(
+      const ImGuiViewport *viewport = GetMainViewport();
+      SetNextWindowPos(
           ImVec2(viewport->WorkPos.x + separatorPos, viewport->WorkPos.y));
-      ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos,
-                                      viewport->WorkSize.y - 200.0f));
+      SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos,
+                               viewport->WorkSize.y - 200.0f));
       ImGuiWindowFlags welcome_flags =
           ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
           ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse;
 
-      ImGui::Begin("Welcome Screen", nullptr, welcome_flags);
+      Begin("Welcome Screen", nullptr, welcome_flags);
 
       // Center content
-      ImVec2 window_size = ImGui::GetWindowSize();
+      ImVec2 window_size = GetWindowSize();
       ImVec2 center_pos = ImVec2(window_size.x * 0.5f, window_size.y * 0.5f);
 
-      ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 1.0f));
+      PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 1.0f));
 
       // Title
-      ImGui::SetCursorPosX(center_pos.x -
-                           ImGui::CalcTextSize("Welcome").x * 0.5f);
-      ImGui::SetCursorPosY(center_pos.y - 150);
-      ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
-      ImGui::Text("Welcome");
-      ImGui::PopStyleColor();
+      SetCursorPosX(center_pos.x - CalcTextSize("Welcome").x * 0.5f);
+      SetCursorPosY(center_pos.y - 150);
+      PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
+      Text("Welcome");
+      PopStyleColor();
 
       // Subtitle
-      ImGui::SetCursorPosX(center_pos.x -
-                           ImGui::CalcTextSize("RandomIDE - Start").x * 0.5f);
-      ImGui::SetCursorPosY(center_pos.y - 120);
-      ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
-      ImGui::Text("RandomIDE - Start");
-      ImGui::PopStyleColor();
+      SetCursorPosX(center_pos.x - CalcTextSize("RandomIDE - Start").x * 0.5f);
+      SetCursorPosY(center_pos.y - 120);
+      PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+      Text("RandomIDE - Start");
+      PopStyleColor();
 
       // Button styling
-      ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
-      ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
-                            ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
-      ImGui::PushStyleColor(ImGuiCol_ButtonActive,
-                            ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
+      PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+      PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
+      PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
 
       // New File Button
       float button_width = 200;
-      ImGui::SetCursorPosX(center_pos.x - button_width * 0.5f);
-      ImGui::SetCursorPosY(center_pos.y - 50);
-      if (ImGui::Button("New File", ImVec2(button_width, 40))) {
+      SetCursorPosX(center_pos.x - button_width * 0.5f);
+      SetCursorPosY(center_pos.y - 50);
+      if (Button("New File", ImVec2(button_width, 40))) {
         isCreatingNewFile = true;
         newFileNameBuffer[0] = '\0';
         showWelcomeScreen = false;
       } else if (isCreatingNewFile) {
         // If user cancels new file creation, go back to welcome screen
-        if (ImGui::IsKeyPressed(ImGuiKey_Escape) ||
-            (ImGui::IsMouseClicked(ImGuiMouseButton_Left) &&
-             !ImGui::IsItemActive())) {
+        if (IsKeyPressed(ImGuiKey_Escape) ||
+            (IsMouseClicked(ImGuiMouseButton_Left) && !IsItemActive())) {
           showWelcomeScreen = true;
         }
       }
 
       // Open File Button
-      ImGui::SetCursorPosX(center_pos.x - button_width * 0.5f);
-      ImGui::SetCursorPosY(center_pos.y + 10);
-      if (ImGui::Button("Open File", ImVec2(button_width, 40))) {
+      SetCursorPosX(center_pos.x - button_width * 0.5f);
+      SetCursorPosY(center_pos.y + 10);
+      if (Button("Open File", ImVec2(button_width, 40))) {
         auto selection =
             pfd::open_file("Open File", ".",
                            {"C++ Files", "*.cpp *.h *.hpp", "All Files", "*"})
@@ -393,9 +429,9 @@ int main() {
       }
 
       // Open Folder Button
-      ImGui::SetCursorPosX(center_pos.x - button_width * 0.5f);
-      ImGui::SetCursorPosY(center_pos.y + 70);
-      if (ImGui::Button("Open Folder", ImVec2(button_width, 40))) {
+      SetCursorPosX(center_pos.x - button_width * 0.5f);
+      SetCursorPosY(center_pos.y + 70);
+      if (Button("Open Folder", ImVec2(button_width, 40))) {
         auto folder = pfd::select_folder("Open Folder", ".").result();
         if (!folder.empty()) {
           current_path = folder;
@@ -403,61 +439,61 @@ int main() {
         }
       }
 
-      ImGui::PopStyleColor(3); // Pop button colors
-      ImGui::PopStyleColor();  // Pop window bg
+      PopStyleColor(3); // Pop button colors
+      PopStyleColor();  // Pop window bg
 
-      ImGui::End();
+      End();
     }
 
     // Sidebar Explorer
-    const ImGuiViewport *viewport = ImGui::GetMainViewport();
+    const ImGuiViewport *viewport = GetMainViewport();
 
-    ImGui::SetNextWindowPos(viewport->WorkPos);
-    ImGui::SetNextWindowSize(ImVec2(separatorPos, viewport->WorkSize.y));
+    SetNextWindowPos(viewport->WorkPos);
+    SetNextWindowSize(ImVec2(separatorPos, viewport->WorkSize.y));
     ImGuiWindowFlags sidebar_flags =
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
 
-    ImGui::Begin("File Explorer", nullptr, sidebar_flags);
+    Begin("File Explorer", nullptr, sidebar_flags);
 
-    if (ImGui::Button("Up")) {
+    if (Button("Up")) {
       if (current_path.has_parent_path()) {
         current_path = current_path.parent_path();
       }
     }
-    ImGui::SameLine();
-    if (ImGui::Button("New File")) {
+    SameLine();
+    if (Button("New File")) {
       isCreatingNewFile = true;
       newFileNameBuffer[0] = '\0';
     }
-    ImGui::SameLine();
-    ImGui::Text(current_path.string().c_str());
+    SameLine();
+    Text(current_path.string().c_str());
 
-    ImGui::Separator();
+    Separator();
 
     // Context menu for empty space
-    if (ImGui::BeginPopupContextWindow("##empty_space_context",
-                                       ImGuiPopupFlags_NoOpenOverItems |
-                                           ImGuiPopupFlags_MouseButtonRight)) {
-      if (ImGui::MenuItem("New File")) {
+    if (BeginPopupContextWindow("##empty_space_context",
+                                ImGuiPopupFlags_NoOpenOverItems |
+                                    ImGuiPopupFlags_MouseButtonRight)) {
+      if (MenuItem("New File")) {
         isCreatingNewFile = true;
         newFileNameBuffer[0] = '\0';
       }
-      if (ImGui::MenuItem("New Folder")) {
+      if (MenuItem("New Folder")) {
         isCreatingNewFolder = true;
         newFolderNameBuffer[0] = '\0';
       }
-      ImGui::EndPopup();
+      EndPopup();
     }
 
     // List directories and files
     try {
       if (isCreatingNewFile) {
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
-        ImGui::Text("[FILE] ");
-        ImGui::SameLine();
-        ImGui::SetKeyboardFocusHere();
-        if (ImGui::InputText("##newfilename", newFileNameBuffer, 256,
-                             ImGuiInputTextFlags_EnterReturnsTrue)) {
+        PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
+        Text("[FILE] ");
+        SameLine();
+        SetKeyboardFocusHere();
+        if (InputText("##newfilename", newFileNameBuffer, 256,
+                      ImGuiInputTextFlags_EnterReturnsTrue)) {
           if (strlen(newFileNameBuffer) > 0) {
             std::filesystem::path new_file_path =
                 current_path / newFileNameBuffer;
@@ -475,10 +511,10 @@ int main() {
           }
           isCreatingNewFile = false;
         }
-        ImGui::PopStyleColor();
+        PopStyleColor();
 
         // Cancel on Escape
-        if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+        if (IsKeyPressed(ImGuiKey_Escape)) {
           isCreatingNewFile = false;
           // If no tabs are open, go back to welcome screen
           if (openTabs.empty()) {
@@ -487,8 +523,7 @@ int main() {
         }
 
         // Cancel on click outside the input box
-        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) &&
-            !ImGui::IsItemActive()) {
+        if (IsMouseClicked(ImGuiMouseButton_Left) && !IsItemActive()) {
           isCreatingNewFile = false;
           // If no tabs are open, go back to welcome screen
           if (openTabs.empty()) {
@@ -499,12 +534,12 @@ int main() {
 
       // Show inline new folder input if creating new folder
       if (isCreatingNewFolder) {
-        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
-        ImGui::Text("[DIR] ");
-        ImGui::SameLine();
-        ImGui::SetKeyboardFocusHere();
-        if (ImGui::InputText("##newfoldername", newFolderNameBuffer, 256,
-                             ImGuiInputTextFlags_EnterReturnsTrue)) {
+        PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+        Text("[DIR] ");
+        SameLine();
+        SetKeyboardFocusHere();
+        if (InputText("##newfoldername", newFolderNameBuffer, 256,
+                      ImGuiInputTextFlags_EnterReturnsTrue)) {
           if (strlen(newFolderNameBuffer) > 0) {
             std::filesystem::path new_folder_path =
                 current_path / newFolderNameBuffer;
@@ -514,16 +549,15 @@ int main() {
           }
           isCreatingNewFolder = false;
         }
-        ImGui::PopStyleColor();
+        PopStyleColor();
 
         // Cancel on Escape
-        if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+        if (IsKeyPressed(ImGuiKey_Escape)) {
           isCreatingNewFolder = false;
         }
 
         // Cancel on click outside the input box
-        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) &&
-            !ImGui::IsItemActive()) {
+        if (IsMouseClicked(ImGuiMouseButton_Left) && !IsItemActive()) {
           isCreatingNewFolder = false;
         }
       }
@@ -534,25 +568,25 @@ int main() {
         bool is_directory = entry.is_directory();
 
         if (is_directory) {
-          ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
-          if (ImGui::Selectable(("[DIR] " + filename).c_str())) {
+          PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+          if (Selectable(("[DIR] " + filename).c_str())) {
             current_path = entry.path();
           }
           // Right-click context menu for directory
-          if (ImGui::BeginPopupContextItem()) {
-            if (ImGui::MenuItem("Delete")) {
+          if (BeginPopupContextItem()) {
+            if (MenuItem("Delete")) {
               try {
                 std::filesystem::remove_all(entry.path());
               } catch (const std::filesystem::filesystem_error &e) {
                 // Handle error silently
               }
             }
-            ImGui::EndPopup();
+            EndPopup();
           }
-          ImGui::PopStyleColor();
+          PopStyleColor();
         } else {
-          ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
-          if (ImGui::Selectable(("[FILE] " + filename).c_str())) {
+          PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
+          if (Selectable(("[FILE] " + filename).c_str())) {
             // Check if file is already open in tabs
             bool alreadyOpen = false;
             int existingTabIndex = -1;
@@ -578,24 +612,24 @@ int main() {
             showWelcomeScreen = false;
           }
           // Right-click context menu for file
-          if (ImGui::BeginPopupContextItem()) {
-            if (ImGui::MenuItem("Delete")) {
+          if (BeginPopupContextItem()) {
+            if (MenuItem("Delete")) {
               try {
                 std::filesystem::remove(entry.path());
               } catch (const std::filesystem::filesystem_error &e) {
                 // Handle error silently
               }
             }
-            ImGui::EndPopup();
+            EndPopup();
           }
-          ImGui::PopStyleColor();
+          PopStyleColor();
         }
       }
     } catch (const std::filesystem::filesystem_error &e) {
-      ImGui::Text("Error reading directory");
+      Text("Error reading directory");
     }
 
-    ImGui::End();
+    End();
 
     // Handle separator dragging (check if mouse is near separator)
     float separator_x = viewport->WorkPos.x + separatorPos;
@@ -603,8 +637,8 @@ int main() {
         (io.MousePos.x >= separator_x - 4 && io.MousePos.x <= separator_x + 4);
 
     if (is_near_separator || is_dragging_separator) {
-      ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-      if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+      SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+      if (IsMouseDown(ImGuiMouseButton_Left)) {
         is_dragging_separator = true;
         separatorPos = io.MousePos.x - viewport->WorkPos.x;
 
@@ -614,7 +648,7 @@ int main() {
           separatorPos = viewport->WorkSize.x - 100.0f;
       }
     }
-    if (ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
+    if (IsMouseReleased(ImGuiMouseButton_Left)) {
       is_dragging_separator = false;
     }
 
@@ -624,10 +658,9 @@ int main() {
     float terminalYPos =
         viewport->WorkPos.y + viewport->WorkSize.y - terminalHeight;
 
-    ImGui::SetNextWindowPos(
-        ImVec2(viewport->WorkPos.x + separatorPos, terminalYPos));
+    SetNextWindowPos(ImVec2(viewport->WorkPos.x + separatorPos, terminalYPos));
 
-    ImGui::SetNextWindowSize(
+    SetNextWindowSize(
         ImVec2(viewport->WorkSize.x - separatorPos, terminalHeight));
 
     // --- C. Set strict flags to lock the window ---
@@ -638,37 +671,37 @@ int main() {
     window_flags |= ImGuiWindowFlags_NoNavFocus;
 
     // Draw terminal
-    ImGui::Begin("Terminal", nullptr, window_flags);
+    Begin("Terminal", nullptr, window_flags);
 
     const float footerHeightToReserve =
-        ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+        GetStyle().ItemSpacing.y + GetFrameHeightWithSpacing();
 
-    if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footerHeightToReserve),
-                          false, ImGuiWindowFlags_HorizontalScrollbar)) {
+    if (BeginChild("ScrollingRegion", ImVec2(0, -footerHeightToReserve), false,
+                   ImGuiWindowFlags_HorizontalScrollbar)) {
       for (const std::string &line : terminalLog) {
         if (line.rfind("> ", 0) == 0) {
-          ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 1.0f, 0.4f, 1.0f));
-          ImGui::TextUnformatted(line.c_str());
-          ImGui::PopStyleColor();
+          PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 1.0f, 0.4f, 1.0f));
+          TextUnformatted(line.c_str());
+          PopStyleColor();
         } else {
-          ImGui::TextUnformatted(line.c_str());
+          TextUnformatted(line.c_str());
         }
       }
 
-      if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
-        ImGui::SetScrollHereY(1.0f);
+      if (GetScrollY() >= GetScrollMaxY()) {
+        SetScrollHereY(1.0f);
       }
     }
-    ImGui::EndChild();
-    ImGui::Separator();
+    EndChild();
+    Separator();
 
     bool reclaimFocus = false;
     ImGuiInputTextFlags inputFlags = ImGuiInputTextFlags_EnterReturnsTrue;
 
-    ImGui::PushItemWidth(-1);
+    PushItemWidth(-1);
 
-    if (ImGui::InputText("##terminalInput", terminalInput,
-                         IM_ARRAYSIZE(terminalInput), inputFlags)) {
+    if (InputText("##terminalInput", terminalInput, IM_ARRAYSIZE(terminalInput),
+                  inputFlags)) {
       std::string command = terminalInput;
 
       if (!command.empty()) {
@@ -703,29 +736,28 @@ int main() {
       strcpy(terminalInput, "");
       reclaimFocus = true;
     }
-    ImGui::PopItemWidth();
+    PopItemWidth();
 
-    ImGui::SetItemDefaultFocus();
+    SetItemDefaultFocus();
     if (reclaimFocus) {
-      ImGui::SetKeyboardFocusHere(-1);
+      SetKeyboardFocusHere(-1);
     }
-    ImGui::End();
+    End();
 
     // Tab bar and Editor window (takes remaining space)
     float tab_bar_height = 30.0f;
-    ImGui::SetNextWindowPos(
+    SetNextWindowPos(
         ImVec2(viewport->WorkPos.x + separatorPos, viewport->WorkPos.y));
-    ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos,
-                                    viewport->WorkSize.y - terminalHeight));
+    SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos,
+                             viewport->WorkSize.y - terminalHeight));
 
     // --- D. Draw the locked Code Editor window ---
-    ImGui::Begin("Code Editor Background", nullptr, window_flags);
+    Begin("Code Editor Background", nullptr, window_flags);
 
     // Draw tab bar if there are open tabs
     if (!openTabs.empty()) {
-      if (ImGui::BeginTabBar("##TabBar",
-                             ImGuiTabBarFlags_Reorderable |
-                                 ImGuiTabBarFlags_AutoSelectNewTabs)) {
+      if (BeginTabBar("##TabBar", ImGuiTabBarFlags_Reorderable |
+                                      ImGuiTabBarFlags_AutoSelectNewTabs)) {
         for (size_t i = 0; i < openTabs.size(); i++) {
           bool is_open = true;
           std::string tab_label = openTabs[i]->filename;
@@ -738,10 +770,10 @@ int main() {
           // Add close button to tab label
           tab_label += "  ";
 
-          if (ImGui::BeginTabItem(tab_label.c_str(), &is_open,
-                                  ImGuiTabItemFlags_None)) {
+          if (BeginTabItem(tab_label.c_str(), &is_open,
+                           ImGuiTabItemFlags_None)) {
             active_tab_index = i;
-            ImGui::EndTabItem();
+            EndTabItem();
           }
 
           // Handle tab close
@@ -757,10 +789,10 @@ int main() {
             i--; // Adjust index after erasing
           }
         }
-        ImGui::EndTabBar();
+        EndTabBar();
       }
 
-      ImGui::Separator();
+      Separator();
 
       // Render the active tab's editor
       if (active_tab_index >= 0 && active_tab_index < (int)openTabs.size()) {
@@ -768,30 +800,30 @@ int main() {
       }
     }
 
-    ImGui::End();
+    End();
     if (!showWelcomeScreen) {
       // Editor window (takes remaining space)
-      ImGui::SetNextWindowPos(
+      SetNextWindowPos(
           ImVec2(viewport->WorkPos.x + separatorPos, viewport->WorkPos.y));
-      ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos,
-                                      viewport->WorkSize.y - terminalHeight));
+      SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos,
+                               viewport->WorkSize.y - terminalHeight));
 
       // --- D. Draw the locked Code Editor window ---
-      ImGui::Begin("Code Editor Background", nullptr, window_flags);
+      Begin("Code Editor Background", nullptr, window_flags);
 
       editor.Render("TextEditor");
 
-      ImGui::End();
+      End();
     }
 
     // 6. Render the frame to the screen
-    ImGui::Render();
+    Render();
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    ImGui_ImplOpenGL3_RenderDrawData(GetDrawData());
 
     glfwSwapBuffers(window);
   }
@@ -799,7 +831,7 @@ int main() {
   // Cleanup
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
+  DestroyContext();
   glfwDestroyWindow(window);
   glfwTerminate();
 
