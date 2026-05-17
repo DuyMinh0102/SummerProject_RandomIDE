@@ -13,3 +13,9 @@
 [submodule "vendor/vendor/imgui"]
 	path = vendor/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "build/vendor/imgui"]
+	path = build/vendor/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "build/vendor/glfw"]
+	path = build/vendor/glfw
+	url = https://github.com/glfw/glfw.git
