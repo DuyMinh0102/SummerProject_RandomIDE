@@ -9,10 +9,14 @@ void WelcomeScreenFunc() {
     return;
 
   const ImGuiViewport *viewport = GetMainViewport();
+
+  float currentSidebarWidth = showSidebar ? separatorPos : 0.0f;
+  float currentTerminalHeight = showTerminal ? terminalHeight : 0.0f;
+
   SetNextWindowPos(
-      ImVec2(viewport->WorkPos.x + separatorPos, viewport->WorkPos.y));
-  SetNextWindowSize(ImVec2(viewport->WorkSize.x - separatorPos,
-                           viewport->WorkSize.y - terminalHeight));
+      ImVec2(viewport->WorkPos.x + currentSidebarWidth, viewport->WorkPos.y));
+  SetNextWindowSize(ImVec2(viewport->WorkSize.x - currentSidebarWidth,
+                           viewport->WorkSize.y - currentTerminalHeight));
 
   ImGuiWindowFlags welcome_flags =
       ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |

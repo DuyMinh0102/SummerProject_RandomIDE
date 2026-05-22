@@ -104,14 +104,15 @@ void MainMenuBarFunc(GLFWwindow *window) {
         if (io.FontGlobalScale >= 0.5f)
           io.FontGlobalScale -= 0.1f;
       }
-      if (MenuItem("Toggle Sidebar", "Super + E", showSidebar)) {
-        showSidebar = !showSidebar;
-      }
-      if (MenuItem("Toggle Terminal", "Super + `", showTerminal)) {
-        showTerminal = !showTerminal;
-      }
 
       EndMenu();
+    }
+
+    if (MenuItem("Sidebar")) {
+      showSidebar = !showSidebar;
+    }
+    if (MenuItem("Terminal")) {
+      showTerminal = !showTerminal;
     }
 
     if (io.KeyCtrl) {
