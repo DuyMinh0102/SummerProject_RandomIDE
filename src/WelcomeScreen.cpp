@@ -28,37 +28,24 @@ void WelcomeScreenFunc() {
   ImVec2 windowSize = GetWindowSize();
   ImVec2 centerPos = ImVec2(windowSize.x * 0.5f, windowSize.y * 0.5f);
 
-  PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 1.0f));
-
-  SetNextItemWidth(centerPos.x);
-  SetCursorPosX(centerPos.x - ImGui::CalcTextSize("Welcome").x * 0.5f);
-  SetCursorPosY(centerPos.y - 150);
-  PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
-  Text("Welcome");
-  PopStyleColor();
-
-  SetCursorPosX(centerPos.x - CalcTextSize("RandomIDE - Start").x * 0.5f);
-  SetCursorPosY(centerPos.y - 120);
-  PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
-  Text("RandomIDE - Start");
-  PopStyleColor();
-
   PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
   PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
   PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
 
-  float button_width = 200;
+  float button_width = CalcTextSize("Open Folder").x + 10;
+  float button_height = CalcTextSize("New File").y + 10;
+
   SetCursorPosX(centerPos.x - button_width * 0.5f);
-  SetCursorPosY(centerPos.y - 50);
-  if (Button("New File", ImVec2(button_width, 40))) {
+  SetCursorPosY(centerPos.y - button_height - 10);
+  if (Button("New File", ImVec2(button_width, button_height))) {
     isCreatingNewFile = true;
     newFileNameBuffer[0] = '\0';
     showWelcomeScreen = false;
   }
 
   SetCursorPosX(centerPos.x - button_width * 0.5f);
-  SetCursorPosY(centerPos.y + 10);
-  if (Button("Open File", ImVec2(button_width, 40))) {
+  SetCursorPosY(centerPos.y);
+  if (Button("Open File", ImVec2(button_width, button_height))) {
     auto selection =
         pfd::open_file("Open File", ".",
                        {"C++ Files", "*.cpp *.h *.hpp", "All Files", "*"})
@@ -89,14 +76,29 @@ void WelcomeScreenFunc() {
   }
 
   SetCursorPosX(centerPos.x - button_width * 0.5f);
-  SetCursorPosY(centerPos.y + 70);
-  if (Button("Open Folder", ImVec2(button_width, 40))) {
+  SetCursorPosY(centerPos.y + button_height + 10);
+  if (Button("Open Folder", ImVec2(button_width, button_height))) {
     auto folder = pfd::select_folder("Open Folder", ".").result();
     if (!folder.empty()) {
       current_path = folder;
       showWelcomeScreen = false;
     }
   }
+
+  PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 1.0f));
+
+  SetCursorPosX(centerPos.x - CalcTextSize("RandomIDE - Start").x * 0.5f);
+  SetCursorPosY(centerPos.y - 2 * button_height - 20);
+  PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+  Text("RandomIDE - Start");
+  PopStyleColor();
+
+  SetNextItemWidth(centerPos.x);
+  SetCursorPosX(centerPos.x - CalcTextSize("Welcome").x * 0.5f);
+  SetCursorPosY(centerPos.y - 2 * button_height - CalcTextSize("R").y - 20);
+  PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
+  Text("Welcome");
+  PopStyleColor();
 
   PopStyleColor(3);
   PopStyleColor();

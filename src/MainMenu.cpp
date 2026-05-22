@@ -97,12 +97,16 @@ void MainMenuBarFunc(GLFWwindow *window) {
       Separator();
 
       if (MenuItem("Zoom In", "Ctrl + =")) {
-        if (io.FontGlobalScale <= 10.0f)
+        if (io.FontGlobalScale < 4.0f) {
           io.FontGlobalScale += 0.1f;
+          separatorPos += 0.1f;
+        }
       }
       if (MenuItem("Zoom Out", "Ctrl + -")) {
-        if (io.FontGlobalScale >= 0.5f)
+        if (io.FontGlobalScale > 1.0f) {
           io.FontGlobalScale -= 0.1f;
+          separatorPos -= 0.1f;
+        }
       }
 
       EndMenu();
@@ -117,15 +121,21 @@ void MainMenuBarFunc(GLFWwindow *window) {
 
     if (io.KeyCtrl) {
       if (IsKeyPressed(ImGuiKey_Equal)) {
-        if (io.FontGlobalScale < 10.0f)
+        if (io.FontGlobalScale < 4.0f) {
           io.FontGlobalScale += 0.1f;
+          separatorPos += 0.1f;
+        }
       }
       if (IsKeyPressed(ImGuiKey_Minus)) {
-        if (io.FontGlobalScale > 0.5f)
+        if (io.FontGlobalScale > 1.0f) {
           io.FontGlobalScale -= 0.1f;
+          separatorPos -= 0.1f;
+        }
       }
-      if (IsKeyPressed(ImGuiKey_0))
+      if (IsKeyPressed(ImGuiKey_0)) {
         io.FontGlobalScale = 1.0f;
+        separatorPos = 250.0f;
+      }
 
       if (IsKeyPressed(ImGuiKey_O)) {
         auto selection =
